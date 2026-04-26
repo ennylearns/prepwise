@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Lexend:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#ffd4c5",
+                        "surface-container-highest": "#e2e1ed",
+                        "on-surface-variant": "#434654",
+                        "surface": "#faf8ff",
+                        "on-tertiary-fixed-variant": "#802a00",
+                        "error": "#ba1a1a",
+                        "secondary": "#735c00",
+                        "tertiary": "#852b00",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "outline": "#737686",
+                        "secondary-fixed": "#ffe083",
+                        "on-background": "#191b23",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "surface-container": "#ededf8",
+                        "inverse-surface": "#2e3039",
+                        "surface-dim": "#d9d9e4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "background": "#faf8ff",
+                        "on-primary-container": "#d4dcff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#eec200",
+                        "primary": "#003fb1",
+                        "on-primary-fixed-variant": "#003dab",
+                        "on-secondary-fixed": "#231b00",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#1353d8",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcf",
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-container": "#6f5900",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-primary-fixed": "#00174d",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ad3b00",
+                        "secondary-container": "#fed01b",
+                        "surface-variant": "#e2e1ed",
+                        "primary-container": "#1a56db",
+                        "surface-container-high": "#e7e7f3",
+                        "inverse-primary": "#b5c4ff",
+                        "on-surface": "#191b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "container-margin": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Lexend"],
+                        "button": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf8ff; /* background */
+            color: #191b23; /* on-background */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen pb-[80px]">
+<!-- TopAppBar Component -->
+<header class="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md z-50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="school">school</span>
+<span class="text-xl font-black tracking-tight text-blue-700 dark:text-blue-400 font-h1 text-h1">Prepwise</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Portrait of a young male student looking confident, wearing a casual t-shirt against a neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvKTQzUX65QW6RJAv6IjbIIcVM85gtFAnL7WdvEPIsr8iyltNdITww0y8mE_Eh-CD4lfAdz58JNuLY1CEbsoPXzynZKb7D4VEc8B3q1GQ0gp7E8b9N3NO7D4FPdNATN8DlVNlrsIOP62ojwHjRDAnYekmz3qcztX7cXlXLa5XumU9t46P8BGgoC4UelGDZcX_sWeHtgWagCniSC21CUd3DR8nk5OFPINant-ixa0z3QQ5wr4UsAW7pfGEoA3ZBort-tvfjc1MYGnk"/>
+</div>
+</header>
+<!-- Main Navigation Container -->
+<div class="flex">
+<!-- NavigationDrawer (Hidden on Mobile, Visible on Desktop) -->
+<nav class="hidden lg:flex flex-col h-screen w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 px-4 sticky top-16 shrink-0">
+<div class="flex items-center gap-sm mb-lg px-2">
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Teacher Avatar" class="w-full h-full object-cover" data-alt="Professional portrait of a teacher looking approachable in a classroom setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEQCdEzF88BTiPmRf3lojwg5RtcwhphICs0rhzMaOfTdilubEdXBPB4nWpdSffAeo1aYGIkXT4JpANPIG8Sic2NGx8cAH7O4h17rBydMKx_tbag_jsgmVcJMbc3kS5ZVyCf9QUCOAhzW1eoPPmKfuZwOqtQrJFOYqaE5Xb5ccgakSfIr_twtjiicbwN3qCv3V9oY-BJyWzrvavQPD_Mt2uva3JGcHvFrQngDmMQbGwUxjdhG4PIVfArrK_7Ctm6ZjMP6Ne8sjqeEo"/>
+</div>
+<div>
+<div class="font-h2 text-h2 text-on-surface">Instructor Portal</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Manage Curriculum</div>
+</div>
+</div>
+<ul class="flex flex-col gap-sm">
+<li>
+<a class="flex items-center gap-md px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-r-4 border-blue-700 dark:border-blue-400 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                        Lessons
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+                        Questions
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                        Analytics
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-body-md text-body-md mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-container-margin md:px-lg py-lg">
+<!-- Welcome & Quick Stats Bento -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl">
+<!-- Welcome Banner -->
+<div class="col-span-1 md:col-span-2 bg-primary text-on-primary rounded-xl p-lg relative overflow-hidden flex flex-col justify-center shadow-[0_8px_16px_rgba(0,0,0,0.08)]">
+<div class="relative z-10">
+<h1 class="font-display text-display mb-sm">Welcome back, Student!</h1>
+<p class="font-body-lg text-body-lg opacity-90 max-w-md">You're making great progress. Ready to tackle today's topics?</p>
+</div>
+<!-- Decorative element -->
+<div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/20 to-transparent pointer-events-none"></div>
+</div>
+<!-- Quick Stats -->
+<div class="col-span-1 grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-[0_2px_4px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-secondary-container mb-xs" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-h1 text-h1 text-on-surface">12</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">DAY STREAK</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-[0_2px_4px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary mb-xs" data-icon="task_alt" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<span class="font-h1 text-h1 text-on-surface">45</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">TOPICS DONE</span>
+</div>
+</div>
+</section>
+<!-- Subject Selection -->
+<section>
+<div class="flex justify-between items-end mb-md">
+<h2 class="font-h2 text-h2 text-on-surface">Your Subjects</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Mathematics Card -->
+<a class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group block" href="#">
+<div class="flex justify-between items-start mb-md">
+<div class="h-12 w-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="calculate">calculate</span>
+</div>
+<span class="font-label-caps text-label-caps bg-surface-container text-on-surface-variant px-2 py-1 rounded">Core</span>
+</div>
+<h3 class="font-h2 text-h2 text-on-surface mb-xs">Mathematics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Algebra &amp; Geometry</p>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-xs">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-primary font-bold">65%</span>
+</div>
+<div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 65%;"></div>
+</div>
+</div>
+</a>
+<!-- English Card -->
+<a class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group block" href="#">
+<div class="flex justify-between items-start mb-md">
+<div class="h-12 w-12 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+</div>
+<span class="font-label-caps text-label-caps bg-surface-container text-on-surface-variant px-2 py-1 rounded">Core</span>
+</div>
+<h3 class="font-h2 text-h2 text-on-surface mb-xs">English</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Comprehension &amp; Lexis</p>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-xs">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-tertiary font-bold">80%</span>
+</div>
+<div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full transition-all duration-500" style="width: 80%;"></div>
+</div>
+</div>
+</a>
+<!-- Physics Card -->
+<a class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group block" href="#">
+<div class="flex justify-between items-start mb-md">
+<div class="h-12 w-12 rounded-lg bg-secondary-fixed text-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+</div>
+<span class="font-label-caps text-label-caps bg-surface-container text-on-surface-variant px-2 py-1 rounded">Science</span>
+</div>
+<h3 class="font-h2 text-h2 text-on-surface mb-xs">Physics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Mechanics &amp; Optics</p>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-xs">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-secondary-container font-bold">40%</span>
+</div>
+<div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container rounded-full transition-all duration-500" style="width: 40%;"></div>
+</div>
+</div>
+</a>
+<!-- Chemistry Card -->
+<a class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group block" href="#">
+<div class="flex justify-between items-start mb-md">
+<div class="h-12 w-12 rounded-lg bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="experiment">experiment</span>
+</div>
+<span class="font-label-caps text-label-caps bg-surface-container text-on-surface-variant px-2 py-1 rounded">Science</span>
+</div>
+<h3 class="font-h2 text-h2 text-on-surface mb-xs">Chemistry</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Organic &amp; Inorganic</p>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-xs">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-error font-bold">25%</span>
+</div>
+<div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full transition-all duration-500" style="width: 25%;"></div>
+</div>
+</div>
+</a>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar Component (Visible only on Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:hidden">
+<a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-3 py-1 transition-all duration-200 active:scale-95 font-lexend text-[12px] font-medium" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 font-lexend text-[12px] font-medium" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="menu_book">menu_book</span>
+<span>Practice</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 font-lexend text-[12px] font-medium" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="leaderboard">leaderboard</span>
+<span>Progress</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 font-lexend text-[12px] font-medium" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="person">person</span>
+<span>Profile</span>
+</a>
+</nav>
+</body></html>

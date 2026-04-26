@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Admin Portal</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Lexend:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#ffd4c5",
+                        "surface-container-highest": "#e2e1ed",
+                        "on-surface-variant": "#434654",
+                        "surface": "#faf8ff",
+                        "on-tertiary-fixed-variant": "#802a00",
+                        "error": "#ba1a1a",
+                        "secondary": "#735c00",
+                        "tertiary": "#852b00",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "outline": "#737686",
+                        "secondary-fixed": "#ffe083",
+                        "on-background": "#191b23",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "surface-container": "#ededf8",
+                        "inverse-surface": "#2e3039",
+                        "surface-dim": "#d9d9e4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "background": "#faf8ff",
+                        "on-primary-container": "#d4dcff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#eec200",
+                        "primary": "#003fb1",
+                        "on-primary-fixed-variant": "#003dab",
+                        "on-secondary-fixed": "#231b00",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#1353d8",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcf",
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-container": "#6f5900",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-primary-fixed": "#00174d",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ad3b00",
+                        "secondary-container": "#fed01b",
+                        "surface-variant": "#e2e1ed",
+                        "primary-container": "#1a56db",
+                        "surface-container-high": "#e7e7f3",
+                        "inverse-primary": "#b5c4ff",
+                        "on-surface": "#191b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "container-margin": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Lexend"],
+                        "button": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased pb-[72px] lg:pb-0">
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+<!-- TopAppBar (Header) -->
+<header class="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-50 shrink-0">
+<div class="flex items-center gap-sm">
+<!-- Mobile Menu Trigger (Visible only on mobile) -->
+<button class="lg:hidden text-slate-600 dark:text-slate-400 p-2 hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">school</span>
+<span class="font-lexend text-xl font-black tracking-tight text-blue-700 dark:text-blue-400">Prepwise</span>
+</div>
+</div>
+<div class="flex items-center">
+<button class="flex items-center gap-2 hover:opacity-80 transition-opacity active:scale-98">
+<span class="hidden sm:block font-lexend text-sm font-medium text-slate-600 dark:text-slate-400">User Profile</span>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkryUWLA4ObXZdAuhv2tqANvUXlUcpu6RISLH6jZdeABuFAmTggTp8s1XnNVbWPVGTo8qR5U2P0iPzp4Ia8NdOrLl01ynYQY5Vr1VguBwcgDn6zRXNtt25q5mx3_J4RxENboXQ9Z8aUakEnBbofPbEOSC0uP75dMlbc5hngGur3t7lJFOehgiGmIejyiTa6BokvyC3Mmn1xjYGkYvU0QIL8PCPM4sY6ev1UKayIe-LjuRVLOm4f2ytcsObzSEbBC3dht4A0b3x46w"/>
+</button>
+</div>
+</header>
+<!-- Main Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-surface-container-low p-container-margin md:p-lg lg:p-xl">
+<div class="max-w-4xl mx-auto">
+<!-- Page Header -->
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-surface mb-xs">Question Upload Portal</h1>
+<p class="font-body-md text-body-md text-outline">Add a single question manually or upload in bulk via CSV.</p>
+</div>
+<!-- Content Tabs -->
+<div class="flex border-b border-outline-variant mb-lg w-full">
+<button class="flex-1 py-sm border-b-2 border-primary text-primary font-button text-button text-center">Add Single</button>
+<button class="flex-1 py-sm border-b-2 border-transparent text-outline hover:text-on-surface transition-colors font-button text-button text-center">Bulk Upload</button>
+</div>
+<!-- Form Card Container -->
+<div class="bg-surface rounded-xl border border-outline-variant shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-md sm:p-lg md:p-xl">
+<form action="#" class="flex flex-col gap-xl" method="POST">
+<!-- Section: Meta Information -->
+<div class="flex flex-col gap-lg border-b border-surface-variant pb-lg">
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="subject">SUBJECT CATEGORY</label>
+<select class="h-12 w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md font-body-md transition-colors shadow-sm" id="subject" name="subject">
+<option disabled="" selected="" value="">Select Subject</option>
+<option value="math">Mathematics</option>
+<option value="english">English Language</option>
+<option value="physics">Physics</option>
+<option value="chemistry">Chemistry</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="year">EXAMINATION YEAR</label>
+<select class="h-12 w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md font-body-md transition-colors shadow-sm" id="year" name="year">
+<option disabled="" selected="" value="">Select Year</option>
+<option value="2023">2023</option>
+<option value="2022">2022</option>
+<option value="2021">2021</option>
+<option value="2020">2020</option>
+</select>
+</div>
+</div>
+<!-- Section: Question Text -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant flex flex-col sm:flex-row sm:justify-between gap-1" for="question_text">
+<span>QUESTION TEXT</span>
+<span class="text-outline font-normal lowercase">Markdown supported</span>
+</label>
+<textarea class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none p-md font-body-md transition-colors shadow-sm resize-y" id="question_text" name="question_text" placeholder="Enter the full question text here..." rows="4"></textarea>
+</div>
+<!-- Section: Options Container (Bento-style grid for options) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md sm:p-lg">
+<h3 class="font-h2 text-h2 text-on-surface mb-md">Answer Options</h3>
+<div class="flex flex-col gap-md">
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-caps text-label-caps text-on-surface-variant absolute -top-2 left-3 bg-surface-container-lowest px-1" for="option_a">OPTION A</label>
+<input class="h-12 w-full rounded-lg border-outline-variant bg-transparent text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md pt-2 font-body-md transition-colors" id="option_a" name="option_a" type="text"/>
+</div>
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-caps text-label-caps text-on-surface-variant absolute -top-2 left-3 bg-surface-container-lowest px-1" for="option_b">OPTION B</label>
+<input class="h-12 w-full rounded-lg border-outline-variant bg-transparent text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md pt-2 font-body-md transition-colors" id="option_b" name="option_b" type="text"/>
+</div>
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-caps text-label-caps text-on-surface-variant absolute -top-2 left-3 bg-surface-container-lowest px-1" for="option_c">OPTION C</label>
+<input class="h-12 w-full rounded-lg border-outline-variant bg-transparent text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md pt-2 font-body-md transition-colors" id="option_c" name="option_c" type="text"/>
+</div>
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-caps text-label-caps text-on-surface-variant absolute -top-2 left-3 bg-surface-container-lowest px-1" for="option_d">OPTION D</label>
+<input class="h-12 w-full rounded-lg border-outline-variant bg-transparent text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md pt-2 font-body-md transition-colors" id="option_d" name="option_d" type="text"/>
+</div>
+</div>
+</div>
+<!-- Section: Correct Answer & Explanation -->
+<div class="flex flex-col gap-lg border-t border-surface-variant pt-lg">
+<div class="flex flex-col gap-xs w-full">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="correct_answer">CORRECT ANSWER</label>
+<select class="h-12 w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none px-md font-body-md transition-colors shadow-sm" id="correct_answer" name="correct_answer">
+<option disabled="" selected="" value="">Select Correct Option</option>
+<option value="A">Option A</option>
+<option value="B">Option B</option>
+<option value="C">Option C</option>
+<option value="D">Option D</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant" for="explanation">EXPLANATION (OPTIONAL)</label>
+<textarea class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none p-md font-body-md transition-colors shadow-sm resize-y" id="explanation" name="explanation" placeholder="Provide reasoning for the correct answer..." rows="3"></textarea>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-col-reverse sm:flex-row justify-end items-center gap-md mt-sm border-t border-surface-variant pt-lg">
+<button class="w-full sm:w-auto h-12 px-xl rounded-full border border-outline text-on-surface font-button text-button hover:bg-surface-container transition-colors active:scale-95" type="button">
+                                Cancel
+                            </button>
+<button class="w-full sm:w-auto h-12 px-xl rounded-full bg-primary text-on-primary font-button text-button hover:opacity-90 shadow-[0_8px_16px_rgba(0,63,177,0.15)] transition-all active:scale-95 flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                                Save Question
+                            </button>
+</div>
+</form>
+</div>
+<!-- Footer whitespace -->
+<div class="h-xl"></div>
+</div>
+</main>
+</div>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 w-full bg-surface shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t border-outline-variant flex justify-around items-center h-[72px] px-2 z-50 pb-safe">
+<a class="flex flex-col items-center gap-1 p-2 text-outline hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<span class="text-[10px] font-medium font-body-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-outline hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">edit_note</span>
+<span class="text-[10px] font-medium font-body-sm">Lessons</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-primary transition-colors" href="#">
+<div class="bg-primary-container text-on-primary-container px-4 py-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">database</span>
+</div>
+<span class="text-[10px] font-medium font-body-sm mt-1">Questions</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-outline hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">analytics</span>
+<span class="text-[10px] font-medium font-body-sm">Analytics</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-outline hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-medium font-body-sm">Settings</span>
+</a>
+</nav>
+</body></html>

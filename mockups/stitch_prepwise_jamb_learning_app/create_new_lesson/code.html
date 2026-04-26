@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Create Lesson</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#ffd4c5",
+                    "surface-container-highest": "#e2e1ed",
+                    "on-surface-variant": "#434654",
+                    "surface": "#faf8ff",
+                    "on-tertiary-fixed-variant": "#802a00",
+                    "error": "#ba1a1a",
+                    "secondary": "#735c00",
+                    "tertiary": "#852b00",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "outline": "#737686",
+                    "secondary-fixed": "#ffe083",
+                    "on-background": "#191b23",
+                    "primary-fixed-dim": "#b5c4ff",
+                    "surface-container": "#ededf8",
+                    "inverse-surface": "#2e3039",
+                    "surface-dim": "#d9d9e4",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#dbe1ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f3f3fe",
+                    "background": "#faf8ff",
+                    "on-primary-container": "#d4dcff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#eec200",
+                    "primary": "#003fb1",
+                    "on-primary-fixed-variant": "#003dab",
+                    "on-secondary-fixed": "#231b00",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f0f0fb",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#574500",
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#1353d8",
+                    "surface-bright": "#faf8ff",
+                    "tertiary-fixed": "#ffdbcf",
+                    "outline-variant": "#c3c5d7",
+                    "on-secondary-container": "#6f5900",
+                    "on-tertiary-fixed": "#380d00",
+                    "on-primary-fixed": "#00174d",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ad3b00",
+                    "secondary-container": "#fed01b",
+                    "surface-variant": "#e2e1ed",
+                    "primary-container": "#1a56db",
+                    "surface-container-high": "#e7e7f3",
+                    "inverse-primary": "#b5c4ff",
+                    "on-surface": "#191b23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xl": "40px",
+                    "base": "4px",
+                    "container-margin": "16px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "gutter": "12px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "h2": ["Lexend"],
+                    "button": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h1": ["Lexend"]
+            },
+            "fontSize": {
+                    "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md z-50 shadow-sm border-b border-slate-200">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="school">school</span>
+<span class="text-xl font-black tracking-tight text-blue-700 dark:text-blue-400 font-h2">Prepwise</span>
+</div>
+<div class="flex items-center">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Close-up portrait of a smiling male teacher with glasses, professional attire, against a soft neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ-k5Z0lQLdp3iepAuSMVoluCOOFan78cPoOLS8AHED71rrgDl0bjhs-UXZMaSbiC5azwooPO7fgc3zx9duPesjkbYIk2jJWHax0THu2fSuB6tvooRyAKh0aq0r-NTT06grz7SNa2OUMkVP8ZuB4h79X7i91wejYMwe_n_9JZy-ek2dFnPLQLqxS4hcIjpPzE1uvB-Mout_blhxJzykXYNFm78gZexQqkQdsjt9Q9TRW59CNNurH0oZjvA3KN3PtN5vfNy_we9u8"/>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- NavigationDrawer -->
+<nav class="hidden lg:flex flex-col h-full py-6 px-4 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 w-64 shadow-sm">
+<div class="mb-lg flex items-center gap-sm px-2">
+<img alt="Teacher Avatar" class="w-10 h-10 rounded-full border border-outline-variant" data-alt="Portrait of a female instructor smiling, wearing a headset, in a bright, modern educational setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Gt8L2wS9-n9EXfGY3UbVdOFQg--hprZUGR3x8syrumAE1VPLce4te6Rlid-h4QQvixcUOY2jvOC5CV7TylFS_LX_OssYrTkxJcZnwlTT3PN3mO8ptM-cgdh3QW3P4dOdGkDVqFVH04E0rcf5jZaFH47CwmLZTtT6ASHWqxgZS7UMn4kHtGvTvPHEiUWipcPTXwQl9hxJdACpcm-yv8ZTy4H5-8dQ81pjLyB_RpJBXdGQ9z0TfBlpJgWVnJ05gfvl9wVp_U23O8M"/>
+<div>
+<h3 class="font-h2 text-h2 text-on-background">Instructor Portal</h3>
+<p class="font-body-sm text-body-sm text-outline">Manage Curriculum</p>
+</div>
+</div>
+<ul class="flex flex-col gap-sm flex-grow">
+<li>
+<a class="flex items-center gap-sm px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-button text-button">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-r-4 border-blue-700 dark:border-blue-400 cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="font-button text-button">Lessons</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-button text-button">Questions</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-surface p-container-margin md:p-xl">
+<div class="max-w-4xl mx-auto space-y-lg">
+<div class="flex justify-between items-center border-b border-outline-variant pb-md">
+<div>
+<h1 class="font-h1 text-h1 text-on-background">Create New Lesson</h1>
+<p class="font-body-md text-body-md text-outline">Draft a new lesson module for your curriculum.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm rounded-full border border-outline text-on-surface font-button text-button hover:bg-surface-container-low transition-colors">Save Draft</button>
+<button class="px-md py-sm rounded-full bg-primary text-on-primary font-button text-button hover:bg-primary-container transition-colors shadow-sm">Publish</button>
+</div>
+</div>
+<!-- Form Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm space-y-md">
+<h2 class="font-h2 text-h2 text-on-background border-b border-outline-variant pb-sm">Lesson Metadata</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="space-y-sm">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase">Subject</label>
+<select class="w-full h-12 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md bg-surface-container-lowest">
+<option>Select Subject...</option>
+<option>Mathematics</option>
+<option>Physics</option>
+<option>English Language</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase">Section / Unit</label>
+<select class="w-full h-12 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md bg-surface-container-lowest">
+<option>Select Section...</option>
+<option>Unit 1: Introduction</option>
+<option>Unit 2: Advanced Concepts</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase">Specific Topic</label>
+<select class="w-full h-12 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md bg-surface-container-lowest">
+<option>Select Topic...</option>
+<option>Linear Equations</option>
+<option>Quadratic Functions</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Editor Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm space-y-sm flex flex-col h-[500px]">
+<h2 class="font-h2 text-h2 text-on-background border-b border-outline-variant pb-sm">Lesson Content</h2>
+<!-- Editor Toolbar (Mockup) -->
+<div class="flex items-center gap-xs p-sm bg-surface-container-low rounded-t-lg border border-outline-variant border-b-0">
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="format_bold">format_bold</span></button>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="format_italic">format_italic</span></button>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="format_underlined">format_underlined</span></button>
+<div class="w-px h-6 bg-outline-variant mx-xs"></div>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="format_list_bulleted">format_list_bulleted</span></button>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="format_list_numbered">format_list_numbered</span></button>
+<div class="w-px h-6 bg-outline-variant mx-xs"></div>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="image">image</span></button>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="link">link</span></button>
+<button class="p-sm hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined" data-icon="code">code</span></button>
+</div>
+<!-- Editor Area -->
+<textarea class="flex-grow w-full rounded-b-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md p-md resize-none bg-surface-container-lowest" placeholder="Start writing the lesson content here..."></textarea>
+</div>
+<!-- Practice Questions Section -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-lg shadow-sm">
+<div class="flex justify-between items-center border-b border-outline-variant pb-sm mb-md">
+<h2 class="font-h2 text-h2 text-on-background flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary-container" data-icon="quiz">quiz</span>
+                            Practice Questions
+                        </h2>
+<div class="bg-secondary-fixed text-on-secondary-fixed px-sm py-xs rounded-full font-label-caps text-label-caps">
+                            Attached: 0 / 10
+                        </div>
+</div>
+<div class="flex flex-col items-center justify-center p-xl border-2 border-dashed border-outline-variant rounded-lg bg-surface-container-lowest text-center">
+<span class="material-symbols-outlined text-outline text-display mb-sm" data-icon="note_add">note_add</span>
+<h3 class="font-h2 text-h2 text-on-background mb-xs">No questions added yet</h3>
+<p class="font-body-sm text-body-sm text-outline mb-md">Attach questions from the question bank to reinforce this lesson.</p>
+<button class="flex items-center gap-xs px-md py-sm rounded-full bg-surface text-primary border border-primary font-button text-button hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                            Add Practice Questions
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-lexend text-[12px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-lexend text-[12px] font-medium">Practice</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-3 py-1 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="font-lexend text-[12px] font-medium">Lessons</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-lexend text-[12px] font-medium">Profile</span>
+</a>
+</nav>
+</body></html>

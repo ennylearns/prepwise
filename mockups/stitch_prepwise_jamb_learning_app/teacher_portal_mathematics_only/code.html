@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Instructor Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config defined by Design System -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#ffd4c5",
+                    "surface-container-highest": "#e2e1ed",
+                    "on-surface-variant": "#434654",
+                    "surface": "#faf8ff",
+                    "on-tertiary-fixed-variant": "#802a00",
+                    "error": "#ba1a1a",
+                    "secondary": "#735c00",
+                    "tertiary": "#852b00",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "outline": "#737686",
+                    "secondary-fixed": "#ffe083",
+                    "on-background": "#191b23",
+                    "primary-fixed-dim": "#b5c4ff",
+                    "surface-container": "#ededf8",
+                    "inverse-surface": "#2e3039",
+                    "surface-dim": "#d9d9e4",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#dbe1ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f3f3fe",
+                    "background": "#faf8ff",
+                    "on-primary-container": "#d4dcff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#eec200",
+                    "primary": "#003fb1",
+                    "on-primary-fixed-variant": "#003dab",
+                    "on-secondary-fixed": "#231b00",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f0f0fb",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#574500",
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#1353d8",
+                    "surface-bright": "#faf8ff",
+                    "tertiary-fixed": "#ffdbcf",
+                    "outline-variant": "#c3c5d7",
+                    "on-secondary-container": "#6f5900",
+                    "on-tertiary-fixed": "#380d00",
+                    "on-primary-fixed": "#00174d",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#ad3b00",
+                    "secondary-container": "#fed01b",
+                    "surface-variant": "#e2e1ed",
+                    "primary-container": "#1a56db",
+                    "surface-container-high": "#e7e7f3",
+                    "inverse-primary": "#b5c4ff",
+                    "on-surface": "#191b23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xl": "40px",
+                    "base": "4px",
+                    "container-margin": "16px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "gutter": "12px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "h2": ["Lexend"],
+                    "button": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Lexend"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h1": ["Lexend"]
+            },
+            "fontSize": {
+                    "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                    "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                    "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                    "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+            }
+          }
+        }
+      }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Lexend:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-4 h-16 z-50 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-xl font-black tracking-tight text-blue-700 dark:text-blue-400 font-lexend text-base font-semibold">Prepwise</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:opacity-80 transition-opacity active:scale-98 transition-transform">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional headshot of a female teacher in her 30s with warm smile, well-lit portrait against light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeTsbhegi-52VyuNZFsugRoysyO6WYQRtF9PUbTFQFBLAZ5H9vbVIEjnOCzNs6HHfLzlJoDdwbx0OnoS9PrqXcmUdeTghWMWUkT-gRIRRxH-EaJPTPQDMML8Ufl799vlOx0bqYH985Y3urst0V_Vo77EcgdLLO_zHMSpyhIMxDIUn4F7FVk0auNcmY3CDZBbJtzr0rDT_cID_NECzG7t54HaSARqhUgLfkAUvyG7_Uq96-WYQxHHYgPc0w6CbKCuqjgE2MzQQvoVM"/>
+</div>
+</button>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden lg:flex flex-col h-full py-6 px-4 w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 fixed left-0 top-16 z-40">
+<!-- Header Profile -->
+<div class="flex items-center gap-sm mb-lg px-2">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Teacher Avatar" class="w-full h-full object-cover" data-alt="professional headshot of a female teacher in her 30s with warm smile, well-lit portrait against light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCjyMZ7TVUH0EqgzJj-nS7UKGUKhcZpOQhzyNc7LSKsq0E_LjYDN82x3Ym3CGNe76DdO4SYAbDECHiG34uCW_3MonEgJ2_HAb5Q1uTw0gBq27pc6YQaQj-Sd-5IpWuEXpk-Vs5P4TNcqYzMMoF3g-tb6oZHt-t7cLoh0Nja-RUlykar6j0x0fnBiyRIzx2Bx1iGYtmeWdrGmvX1gs4QSWtmpfXm_9LJkdFnOGqMv8Wms_4-d6ZCxjZal63KFl_PJDw-bYny-a30RE"/>
+</div>
+<div>
+<div class="font-lexend text-sm font-medium text-blue-700 dark:text-blue-400">Mathematics Instructor Portal</div>
+<div class="font-body-sm text-body-sm text-slate-500">Manage Curriculum</div>
+</div>
+</div>
+<!-- Nav Links -->
+<nav class="flex flex-col gap-xs flex-grow font-lexend text-sm font-medium">
+<!-- Active Item: Dashboard -->
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-r-4 border-blue-700 dark:border-blue-400" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span>Lessons</span>
+</a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>Questions</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 font-lexend text-sm font-medium">
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow ml-0 lg:ml-64 p-4 lg:p-8 overflow-y-auto pb-24 lg:pb-8 bg-surface-bright">
+<div class="max-w-6xl mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<h1 class="font-h1 text-h1 text-on-background">Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Welcome back. Here's what's happening with your classes.</p>
+</div>
+<button class="bg-primary text-on-primary font-button text-button px-lg py-sm rounded-full hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs shadow-[0_4px_12px_rgba(0,63,177,0.2)]">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Create Lesson
+                    </button>
+</div>
+<!-- Key Metrics (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-md opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-6xl">edit_note</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-xs">Active Lessons</div>
+<div class="font-display text-display text-on-background">24</div>
+<div class="font-body-sm text-body-sm text-primary mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+3 this week</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-md opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-6xl">groups</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-xs">Total Students</div>
+<div class="font-display text-display text-on-background">1,492</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">horizontal_rule</span>
+<span>Steady engagement</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 gap-lg">
+<!-- My Lessons Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h2 class="font-h2 text-h2 text-on-background">My Lessons</h2>
+<button class="text-primary font-button text-button hover:underline text-sm">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant font-label-caps text-label-caps text-on-surface-variant">
+<th class="p-md font-semibold w-1/2">Lesson Title</th>
+<th class="p-md font-semibold">Subject</th>
+<th class="p-md font-semibold text-center">Status</th>
+<th class="p-md font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr class="border-b border-surface-variant hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-background">Advanced Trigonometry Strategies</td>
+<td class="p-md"><span class="bg-primary-container/20 text-primary-container px-2 py-1 rounded text-[12px] font-bold">Math</span></td>
+<td class="p-md text-center">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant text-[12px] font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Published
+                                            </span>
+</td>
+<td class="p-md text-right text-on-surface-variant">
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-background">Calculus Fundamentals</td>
+<td class="p-md"><span class="bg-primary-container/20 text-primary-container px-2 py-1 rounded text-[12px] font-bold">Math</span></td>
+<td class="p-md text-center">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant text-[12px] font-semibold">
+<span class="w-2 h-2 rounded-full bg-outline"></span> Draft
+                                            </span>
+</td>
+<td class="p-md text-right text-on-surface-variant">
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-background">Algebraic Equations</td>
+<td class="p-md"><span class="bg-primary-container/20 text-primary-container px-2 py-1 rounded text-[12px] font-bold">Math</span></td>
+<td class="p-md text-center">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant text-[12px] font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Published
+                                            </span>
+</td>
+<td class="p-md text-right text-on-surface-variant">
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-background">Geometry &amp; Spatial Reasoning</td>
+<td class="p-md"><span class="bg-primary-container/20 text-primary-container px-2 py-1 rounded text-[12px] font-bold">Math</span></td>
+<td class="p-md text-center">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant text-[12px] font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Published
+                                            </span>
+</td>
+<td class="p-md text-right text-on-surface-variant">
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<!-- Active Item (Mapped to Home/Dashboard intent) -->
+<a class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-3 py-1 font-lexend text-[12px] font-medium transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span>Practice</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span>Progress</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Mathematics Path</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;900&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Dotted path styling */
+        .path-line {
+            position: absolute;
+            z-index: 0;
+            width: 8px;
+            background-image: radial-gradient(circle, #c3c5d7 4px, transparent 4px);
+            background-size: 100% 24px;
+            background-repeat: repeat-y;
+            background-position: center;
+        }
+        .path-line.active {
+            background-image: radial-gradient(circle, #003fb1 4px, transparent 4px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#ffd4c5",
+                      "surface-container-highest": "#e2e1ed",
+                      "on-surface-variant": "#434654",
+                      "surface": "#faf8ff",
+                      "on-tertiary-fixed-variant": "#802a00",
+                      "error": "#ba1a1a",
+                      "secondary": "#735c00",
+                      "tertiary": "#852b00",
+                      "tertiary-fixed-dim": "#ffb59a",
+                      "outline": "#737686",
+                      "secondary-fixed": "#ffe083",
+                      "on-background": "#191b23",
+                      "primary-fixed-dim": "#b5c4ff",
+                      "surface-container": "#ededf8",
+                      "inverse-surface": "#2e3039",
+                      "surface-dim": "#d9d9e4",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#dbe1ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#f3f3fe",
+                      "background": "#faf8ff",
+                      "on-primary-container": "#d4dcff",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#eec200",
+                      "primary": "#003fb1",
+                      "on-primary-fixed-variant": "#003dab",
+                      "on-secondary-fixed": "#231b00",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f0f0fb",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#574500",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#1353d8",
+                      "surface-bright": "#faf8ff",
+                      "tertiary-fixed": "#ffdbcf",
+                      "outline-variant": "#c3c5d7",
+                      "on-secondary-container": "#6f5900",
+                      "on-tertiary-fixed": "#380d00",
+                      "on-primary-fixed": "#00174d",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#ad3b00",
+                      "secondary-container": "#fed01b",
+                      "surface-variant": "#e2e1ed",
+                      "primary-container": "#1a56db",
+                      "surface-container-high": "#e7e7f3",
+                      "inverse-primary": "#b5c4ff",
+                      "on-surface": "#191b23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xl": "40px",
+                      "base": "4px",
+                      "container-margin": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "gutter": "12px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "h2": [
+                              "Lexend"
+                      ],
+                      "button": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Lexend"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Lexend"
+                      ]
+              },
+              "fontSize": {
+                      "h2": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "button": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h1": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col md:flex-row">
+<!-- Desktop Navigation Drawer -->
+<nav class="hidden lg:flex flex-col h-screen py-6 px-4 bg-white dark:bg-slate-900 w-64 border-r border-slate-200 dark:border-slate-800 shrink-0 sticky top-0 z-40">
+<div class="mb-8 px-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">school</span>
+<span class="font-h1 text-h1 text-primary">Prepwise</span>
+</div>
+<div class="flex items-center gap-3 mb-8 px-4 py-3 bg-surface-container-low rounded-xl">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="close-up portrait of a young male student with glasses smiling softly against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqeGa3Y1Lb2h4PQArGbyH8v0unKHTBvS_kf2xVKMaP8ExoR-G5Gw0_-CkX_G2cUPZluC7-ILWZD7HIpqqVRTk3-jEme7yO1-qCtjx8d7by7J8HVThJf4YsJm0Rb8ln321xfk08yRiDHLEMiEwpt6uhMIgKr6s8j3gUEo_4JEtCPYk6VLw99y1HP9gP5lELd2tcc_RAGt83IFn6P_n--8wDDYjxd0KXeq4HQDCgDNaO-FEulClmbKGRqTv-J4amVpFriCXKKu-Knws"/>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Instructor Portal</p>
+<p class="font-body-sm text-body-sm text-on-surface">Manage Curriculum</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-lexend text-sm font-medium transition-colors cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-r-4 border-blue-700 dark:border-blue-400 font-lexend text-sm font-medium transition-colors cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+                Lessons
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-lexend text-sm font-medium transition-colors cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+                Questions
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-lexend text-sm font-medium transition-colors cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-lexend text-sm font-medium transition-colors cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<div class="flex-1 flex flex-col min-w-0 pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md z-50 md:hidden">
+<div class="flex items-center gap-2 text-blue-700 dark:text-blue-400">
+<span class="material-symbols-outlined text-2xl">school</span>
+<span class="font-lexend text-base font-semibold text-xl font-black tracking-tight">Prepwise</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-slate-200">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a young male student with glasses smiling softly against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWvq7NCn-ryKXAuPRxU50T1uoErB52N6ub2gZxmwhyqDdyj_tWouFIL1BM9CAKXovNjzGEG6p01xdZGlzpNfxBVIxOI5xphCmR6Sx_JKbJ1DbGTDOLVcRIwTzqyBWV6D8VPGdxBCSA7sY0UNOSp8xaq6Sa9Tpg-pvU4AdVnqyLd65M3o7SPs9XIW7U21EUXe7EEtitBuYkVK8QHS3AMjwCeUYxpE4hK_4gzsMLsA3vhJHJgktDWvowQLfsMx93aZcPJy4f17eAW_o"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-container-margin py-lg max-w-2xl mx-auto w-full flex flex-col items-center relative overflow-hidden">
+<!-- Subject Header -->
+<div class="w-full bg-surface-container-lowest border border-surface-variant rounded-xl p-md mb-xl shadow-[0_2px_4px_rgba(0,0,0,0.04)] text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-2 bg-secondary-container"></div>
+<h1 class="font-h1 text-h1 text-on-background mt-2">Mathematics</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Section 1: Algebra Basics</p>
+<div class="flex justify-center items-center gap-4 mt-4">
+<div class="flex items-center gap-1 text-secondary-container font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[18px] fill">star</span>
+<span>12/15</span>
+</div>
+<div class="flex items-center gap-1 text-primary font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Unit 1</span>
+</div>
+</div>
+</div>
+<!-- Path Container -->
+<div class="relative w-full max-w-[400px] flex flex-col items-center py-8">
+<!-- Central connecting line -->
+<div class="absolute top-8 bottom-24 left-1/2 -translate-x-1/2 w-2 z-0">
+<!-- Completed portion -->
+<div class="w-full h-[35%] bg-primary rounded-t-full relative z-10 shadow-[0_0_10px_rgba(0,63,177,0.3)]"></div>
+<!-- Upcoming dotted portion -->
+<div class="path-line h-[65%] top-[35%] left-1/2 -translate-x-1/2"></div>
+</div>
+<!-- Node 1: Completed -->
+<div class="relative z-10 flex flex-col items-center mb-16 transform -translate-x-12">
+<button class="w-[72px] h-[72px] rounded-full bg-primary flex items-center justify-center shadow-[0_8px_16px_rgba(0,63,177,0.2)] hover:scale-105 transition-transform active:scale-95 border-[4px] border-surface-bright ring-4 ring-primary-fixed relative">
+<span class="material-symbols-outlined text-white text-3xl fill">done</span>
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center border-2 border-surface-bright shadow-sm">
+<span class="material-symbols-outlined text-on-secondary-container text-[16px] fill">star</span>
+</div>
+</button>
+<span class="mt-3 font-button text-button text-on-background bg-surface-container px-3 py-1 rounded-full shadow-sm">Equations</span>
+</div>
+<!-- Node 2: Completed -->
+<div class="relative z-10 flex flex-col items-center mb-16 transform translate-x-16">
+<button class="w-[72px] h-[72px] rounded-full bg-primary flex items-center justify-center shadow-[0_8px_16px_rgba(0,63,177,0.2)] hover:scale-105 transition-transform active:scale-95 border-[4px] border-surface-bright ring-4 ring-primary-fixed relative">
+<span class="material-symbols-outlined text-white text-3xl fill">done</span>
+</button>
+<span class="mt-3 font-button text-button text-on-background bg-surface-container px-3 py-1 rounded-full shadow-sm">Inequalities</span>
+</div>
+<!-- Node 3: Active/Unlocked (The Focus) -->
+<div class="relative z-10 flex flex-col items-center mb-16">
+<!-- Pulsing ring effect -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[72px] h-[72px] rounded-full bg-primary-fixed animate-ping opacity-75"></div>
+<button class="w-[88px] h-[88px] rounded-full bg-white border-[6px] border-primary flex items-center justify-center shadow-[0_8px_24px_rgba(0,63,177,0.3)] hover:scale-105 transition-transform active:scale-95 relative bg-gradient-to-b from-white to-primary-fixed">
+<span class="material-symbols-outlined text-primary text-4xl">functions</span>
+<!-- floating progress indicator -->
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface-container-highest px-2 py-0.5 rounded text-xs font-bold text-primary border border-outline-variant whitespace-nowrap">START</div>
+</button>
+<span class="mt-4 font-h2 text-h2 text-primary">Polynomials</span>
+</div>
+<!-- Node 4: Locked -->
+<div class="relative z-10 flex flex-col items-center mb-16 transform -translate-x-12">
+<button class="w-[72px] h-[72px] rounded-full bg-surface-container-highest flex items-center justify-center border-[4px] border-surface-bright shadow-sm opacity-80 cursor-not-allowed">
+<span class="material-symbols-outlined text-outline text-3xl">lock</span>
+</button>
+<span class="mt-3 font-button text-button text-outline opacity-80">Factoring</span>
+</div>
+<!-- Node 5: Locked -->
+<div class="relative z-10 flex flex-col items-center mb-8 transform translate-x-12">
+<button class="w-[72px] h-[72px] rounded-full bg-surface-container-highest flex items-center justify-center border-[4px] border-surface-bright shadow-sm opacity-80 cursor-not-allowed">
+<span class="material-symbols-outlined text-outline text-3xl">lock</span>
+</button>
+<span class="mt-3 font-button text-button text-outline opacity-80">Graphing</span>
+</div>
+<!-- Treasure Chest / Milestone End -->
+<div class="relative z-10 flex flex-col items-center mt-4">
+<div class="w-24 h-24 rounded-2xl bg-surface-variant flex items-center justify-center shadow-md border-2 border-outline-variant relative overflow-hidden">
+<span class="material-symbols-outlined text-outline text-5xl">inventory_2</span>
+</div>
+<span class="mt-3 font-label-caps text-label-caps text-outline-variant">UNIT 1 EXAM</span>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-white dark:bg-slate-900 md:hidden border-t-0 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl">
+<span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+<span class="tracking-wide">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl px-3 py-1 font-lexend text-[12px] font-medium transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined mb-1 text-[24px] fill">menu_book</span>
+<span class="tracking-wide">Practice</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl">
+<span class="material-symbols-outlined mb-1 text-[24px]">leaderboard</span>
+<span class="tracking-wide">Progress</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-3 py-1 font-lexend text-[12px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95 rounded-xl">
+<span class="material-symbols-outlined mb-1 text-[24px]">person</span>
+<span class="tracking-wide">Profile</span>
+</button>
+</nav>
+</body></html>

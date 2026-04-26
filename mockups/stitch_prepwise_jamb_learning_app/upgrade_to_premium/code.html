@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Upgrade to Premium</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Lexend:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#ffd4c5",
+                      "surface-container-highest": "#e2e1ed",
+                      "on-surface-variant": "#434654",
+                      "surface": "#faf8ff",
+                      "on-tertiary-fixed-variant": "#802a00",
+                      "error": "#ba1a1a",
+                      "secondary": "#735c00",
+                      "tertiary": "#852b00",
+                      "tertiary-fixed-dim": "#ffb59a",
+                      "outline": "#737686",
+                      "secondary-fixed": "#ffe083",
+                      "on-background": "#191b23",
+                      "primary-fixed-dim": "#b5c4ff",
+                      "surface-container": "#ededf8",
+                      "inverse-surface": "#2e3039",
+                      "surface-dim": "#d9d9e4",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#dbe1ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#f3f3fe",
+                      "background": "#faf8ff",
+                      "on-primary-container": "#d4dcff",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#eec200",
+                      "primary": "#003fb1",
+                      "on-primary-fixed-variant": "#003dab",
+                      "on-secondary-fixed": "#231b00",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f0f0fb",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#574500",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#1353d8",
+                      "surface-bright": "#faf8ff",
+                      "tertiary-fixed": "#ffdbcf",
+                      "outline-variant": "#c3c5d7",
+                      "on-secondary-container": "#6f5900",
+                      "on-tertiary-fixed": "#380d00",
+                      "on-primary-fixed": "#00174d",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#ad3b00",
+                      "secondary-container": "#fed01b",
+                      "surface-variant": "#e2e1ed",
+                      "primary-container": "#1a56db",
+                      "surface-container-high": "#e7e7f3",
+                      "inverse-primary": "#b5c4ff",
+                      "on-surface": "#191b23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xl": "40px",
+                      "base": "4px",
+                      "container-margin": "16px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "gutter": "12px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "h2": ["Lexend"],
+                      "button": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display": ["Lexend"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "h1": ["Lexend"]
+              },
+              "fontSize": {
+                      "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                      "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            .material-symbols-outlined[data-weight="fill"] {
+                font-variation-settings: 'FILL' 1;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 backdrop-blur-md z-50 border-b border-slate-200">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-blue-700 hover:opacity-80 transition-opacity cursor-pointer" data-icon="arrow_back">arrow_back</span>
+<span class="text-xl font-black tracking-tight text-blue-700">Prepwise</span>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden" data-alt="Default user avatar profile picture placeholder">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="person">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Transactional flow - Nav suppressed) -->
+<main class="flex-grow flex flex-col items-center py-xl px-container-margin w-full max-w-5xl mx-auto">
+<!-- Hero Section -->
+<section class="text-center w-full max-w-2xl mb-xl">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container mb-md shadow-sm">
+<span class="material-symbols-outlined text-[32px]" data-icon="workspace_premium" data-weight="fill">workspace_premium</span>
+</div>
+<h1 class="font-display text-display text-on-background mb-sm">Go Premium</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Unlock your full potential and ace your exams with unlimited tools and resources.</p>
+</section>
+<!-- Comparison Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-lg w-full mb-xl">
+<!-- Free Plan Card (Level 1 Elevation) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+<div class="mb-md">
+<h2 class="font-h2 text-h2 text-on-background">Free Plan</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Basic access to get started.</p>
+</div>
+<div class="font-display text-[40px] leading-tight font-bold text-on-background mb-lg">
+                    ₦0<span class="font-body-md text-body-md text-on-surface-variant font-normal">/mo</span>
+</div>
+<div class="flex-grow flex flex-col gap-md">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-outline mt-[2px] text-lg" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-background">1 lesson per day</span>
+</div>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-outline mt-[2px] text-lg" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-background">20 questions limit</span>
+</div>
+<div class="flex items-start gap-sm opacity-50">
+<span class="material-symbols-outlined text-outline mt-[2px] text-lg" data-icon="cancel">cancel</span>
+<span class="font-body-md text-body-md text-on-surface-variant">No Mock exams</span>
+</div>
+<div class="flex items-start gap-sm opacity-50">
+<span class="material-symbols-outlined text-outline mt-[2px] text-lg" data-icon="cancel">cancel</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Online access only</span>
+</div>
+</div>
+<div class="mt-lg pt-lg border-t border-surface-variant text-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your current plan</span>
+</div>
+</div>
+<!-- Premium Plan Card (Level 2 Elevation & Highlighted) -->
+<div class="bg-primary-fixed rounded-xl border-2 border-primary p-lg flex flex-col shadow-[0_8px_16px_rgba(0,0,0,0.08)] relative overflow-hidden">
+<!-- Decorative subtle shape -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary rounded-full opacity-10 blur-2xl pointer-events-none"></div>
+<div class="flex justify-between items-start mb-md relative z-10">
+<div>
+<h2 class="font-h2 text-h2 text-on-primary-fixed-variant">Premium Plan</h2>
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant mt-xs opacity-80">Everything you need to succeed.</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-sm py-xs rounded-full uppercase tracking-wider">Recommended</span>
+</div>
+<div class="font-display text-[40px] leading-tight font-bold text-on-primary-fixed-variant mb-lg relative z-10">
+                    ₦2,500<span class="font-body-md text-body-md font-normal opacity-80">/mo</span>
+</div>
+<div class="flex-grow flex flex-col gap-md relative z-10">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-[2px] text-lg" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="font-body-md text-body-md text-on-primary-fixed-variant font-medium">Unlimited access</span>
+</div>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-[2px] text-lg" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="font-body-md text-body-md text-on-primary-fixed-variant font-medium">Full Mock exams</span>
+</div>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-[2px] text-lg" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="font-body-md text-body-md text-on-primary-fixed-variant font-medium">Offline access to materials</span>
+</div>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-[2px] text-lg" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="font-body-md text-body-md text-on-primary-fixed-variant font-medium">Detailed Analytics</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Call to Action Area -->
+<section class="w-full max-w-md flex flex-col items-center sticky bottom-md md:static z-40 bg-background/90 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-md md:p-0 rounded-xl md:rounded-none shadow-[0_-8px_16px_rgba(0,0,0,0.05)] md:shadow-none border border-outline-variant md:border-none">
+<button class="w-full bg-primary text-on-primary font-button text-button h-[48px] rounded-full flex items-center justify-center gap-sm hover:bg-primary/90 transition-colors shadow-sm active:scale-[0.98]">
+<span>Upgrade Now</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Trust Signals -->
+<div class="flex items-center justify-center gap-xs mt-sm text-on-surface-variant opacity-80">
+<span class="material-symbols-outlined text-[16px]" data-icon="lock">lock</span>
+<span class="font-body-sm text-body-sm">Secure Payment</span>
+</div>
+</section>
+</main>
+</body></html>

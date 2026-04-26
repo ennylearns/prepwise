@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepwise - Practice Question</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;900&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#ffd4c5",
+                        "surface-container-highest": "#e2e1ed",
+                        "on-surface-variant": "#434654",
+                        "surface": "#faf8ff",
+                        "on-tertiary-fixed-variant": "#802a00",
+                        "error": "#ba1a1a",
+                        "secondary": "#735c00",
+                        "tertiary": "#852b00",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "outline": "#737686",
+                        "secondary-fixed": "#ffe083",
+                        "on-background": "#191b23",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "surface-container": "#ededf8",
+                        "inverse-surface": "#2e3039",
+                        "surface-dim": "#d9d9e4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "background": "#faf8ff",
+                        "on-primary-container": "#d4dcff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#eec200",
+                        "primary": "#003fb1",
+                        "on-primary-fixed-variant": "#003dab",
+                        "on-secondary-fixed": "#231b00",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#1353d8",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcf",
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-container": "#6f5900",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-primary-fixed": "#00174d",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#ad3b00",
+                        "secondary-container": "#fed01b",
+                        "surface-variant": "#e2e1ed",
+                        "primary-container": "#1a56db",
+                        "surface-container-high": "#e7e7f3",
+                        "inverse-primary": "#b5c4ff",
+                        "on-surface": "#191b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "container-margin": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Lexend"],
+                        "button": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation App Bar (Suppressed due to Task-Focused/Linear intent) -->
+<!-- The user is in a focused "Practice Question" screen, implying a temporary departure from global nav -->
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col w-full max-w-3xl mx-auto px-container-margin py-lg md:py-xl relative">
+<!-- Practice Mode Header: Timer & Progress -->
+<header class="flex items-center justify-between mb-lg sticky top-0 bg-background/90 backdrop-blur-sm py-sm z-10">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<div class="flex flex-col items-center flex-grow px-4">
+<div class="font-h2 text-h2 text-on-background mb-xs">3/10</div>
+<!-- Progress Bar Signature Component -->
+<div class="w-full h-[12px] bg-surface-container rounded-full overflow-hidden flex shadow-sm">
+<div class="h-full bg-secondary-container w-[30%] rounded-full"></div>
+</div>
+</div>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container text-on-surface-variant font-button text-button shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="timer">timer</span>
+</div>
+</header>
+<!-- Question Section -->
+<section class="mb-xl flex-grow">
+<!-- Subject Tag -->
+<div class="mb-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-sm bg-primary-container text-on-primary-container font-label-caps text-label-caps uppercase">Mathematics</span>
+</div>
+<!-- The Question Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-lg border border-outline-variant shadow-[0_2px_4px_rgba(0,0,0,0.04)] mb-lg relative overflow-hidden">
+<div class="font-body-lg text-body-lg text-on-background">
+                    Solve for x: <br/><span class="font-h1 text-h1 mt-sm block">2x + 5 = 15</span>
+</div>
+</div>
+<!-- Multiple Choice Options -->
+<div class="space-y-sm">
+<!-- Option A (Incorrect/Unselected State) -->
+<button class="w-full text-left bg-surface-container-lowest border-2 border-outline-variant hover:border-primary/50 rounded-xl p-md flex items-center transition-all duration-200 focus:outline-none">
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md font-button text-button text-on-surface-variant shrink-0">A</div>
+<div class="font-body-md text-body-md text-on-background flex-grow">x = 10</div>
+</button>
+<!-- Option B (Correct Selected State) -->
+<div class="w-full text-left bg-surface-container-lowest border-2 border-[#16a34a] rounded-xl p-md flex flex-col transition-all duration-200 relative overflow-hidden ring-4 ring-[#16a34a]/10">
+<div class="flex items-center w-full">
+<div class="w-8 h-8 rounded-full bg-[#16a34a] text-white flex items-center justify-center mr-md font-button text-button shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="font-body-md text-body-md text-on-background font-bold flex-grow">x = 5</div>
+</div>
+</div>
+<!-- Explanation Box (Appears below correct option) -->
+<div class="bg-secondary-fixed text-on-secondary-fixed rounded-xl p-md ml-lg relative mt-2 shadow-[0_8px_16px_rgba(0,0,0,0.08)] border border-secondary-fixed-dim/30">
+<!-- Triangle pointer -->
+<div class="absolute -top-2 left-6 w-4 h-4 bg-secondary-fixed transform rotate-45 border-l border-t border-secondary-fixed-dim/30"></div>
+<div class="flex items-start">
+<span class="material-symbols-outlined text-secondary mr-sm shrink-0" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<div>
+<h4 class="font-button text-button mb-xs">Excellent!</h4>
+<p class="font-body-sm text-body-sm opacity-90">
+                                To solve for x, first subtract 5 from both sides: <br/>
+                                2x = 10 <br/>
+                                Then divide both sides by 2: <br/>
+                                x = 5
+                            </p>
+</div>
+</div>
+</div>
+<!-- Option C (Incorrect/Unselected State) -->
+<button class="w-full text-left bg-surface-container-lowest border-2 border-outline-variant hover:border-primary/50 rounded-xl p-md flex items-center transition-all duration-200 focus:outline-none mt-sm opacity-50 cursor-not-allowed">
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md font-button text-button text-on-surface-variant shrink-0">C</div>
+<div class="font-body-md text-body-md text-on-background flex-grow">x = 2</div>
+</button>
+<!-- Option D (Incorrect/Unselected State) -->
+<button class="w-full text-left bg-surface-container-lowest border-2 border-outline-variant hover:border-primary/50 rounded-xl p-md flex items-center transition-all duration-200 focus:outline-none mt-sm opacity-50 cursor-not-allowed">
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md font-button text-button text-on-surface-variant shrink-0">D</div>
+<div class="font-body-md text-body-md text-on-background flex-grow">x = 15</div>
+</button>
+</div>
+</section>
+<!-- Bottom Action Bar -->
+<footer class="sticky bottom-0 bg-background pt-sm pb-lg mt-auto z-10 border-t border-outline-variant/30">
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary rounded-full py-md px-lg font-button text-button flex items-center justify-center transition-colors shadow-[0_4px_12px_rgba(0,63,177,0.2)] focus:outline-none focus:ring-4 focus:ring-primary/20">
+                Next Question
+                <span class="material-symbols-outlined ml-2" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</main>
+<!-- Bottom Navigation Bar (Suppressed due to Task-Focused/Linear intent) -->
+<!-- The user is in a focused "Practice Question" screen, not a top-level destination -->
+</body></html>
