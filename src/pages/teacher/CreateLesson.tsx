@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useQuery, useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar, Button } from '../../components'
 
 interface User {
@@ -19,11 +22,25 @@ type QuestionType = {
   explanation: string
 }
 
-export default function CreateLesson(_props: CreateLessonProps) {
+export default function CreateLesson({ user }: CreateLessonProps) {
   const navigate = useNavigate()
+  const subjects = useQuery(api.teacher.getSubjects)
+  const [selectedSubjectId, setSelectedSubjectId] = useState('')
+  const sections = useQuery(
+    api.teacher.getSections,
+    selectedSubjectId ? { subjectId: selectedSubjectId as Id<"subjects"> } : "skip"
+  )
+  const [selectedSectionId, setSelectedSectionId] = useState('')
+  
+  const allTopics = useQuery(api.teacher.getTopics)
+  const filteredTopics = allTopics?.filter((t: any) => t.sectionId === selectedSectionId)
+
+  const createLessonMutation = useMutation(api.teacher.createLesson)
+  const addLessonQuestionsMutation = useMutation(api.teacher.addLessonQuestions)
+
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [subject, setSubject] = useState('')
+  const [topicId, setTopicId] = useState('')
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -46,15 +63,49 @@ export default function CreateLesson(_props: CreateLessonProps) {
   }
 
   const handleSubmit = async () => {
-    if (!title || !content || questions.length < 10) {
-      alert('Please fill in all fields and add 10 questions')
+    if (!title || !content || !topicId) {
+      alert('Please fill in title, content, and select a topic.')
       return
     }
+    if (questions.length < 1) { // MVP: Require at least 1 question
+      alert('Please add at least 1 question')
+      return
+    }
+    
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      const newLessonId = await createLessonMutation({
+        topicId: topicId as Id<"topics">,
+        title,
+        content,
+        createdBy: user.id as Id<"users">
+      })
+
+      // Map local question state to the API format
+      const formattedQuestions = questions.map((q) => {
+        // Map "A", "B", "C", "D" to the actual option string
+        const optionIndex = q.correct === 'A' ? 0 : q.correct === 'B' ? 1 : q.correct === 'C' ? 2 : 3
+        const correctAnswerString = q.options[optionIndex]
+
+        return {
+          question: q.question,
+          options: q.options,
+          correctAnswer: correctAnswerString,
+          explanation: q.explanation
+        }
+      })
+
+      await addLessonQuestionsMutation({
+        lessonId: newLessonId,
+        questions: formattedQuestions
+      })
+
       navigate('/teacher')
-    }, 1000)
+    } catch (err) {
+      alert('Failed to create lesson: ' + err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -69,17 +120,55 @@ export default function CreateLesson(_props: CreateLessonProps) {
             <div className="space-y-xs">
               <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Subject</label>
               <select
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                value={selectedSubjectId}
+                onChange={(e) => {
+                  setSelectedSubjectId(e.target.value)
+                  setSelectedSectionId('')
+                  setTopicId('')
+                }}
                 className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
               >
                 <option value="">Select Subject</option>
-                <option value="math">Mathematics</option>
-                <option value="physics">Physics</option>
-                <option value="chemistry">Chemistry</option>
-                <option value="english">English</option>
+                {subjects?.map(s => (
+                  <option key={s._id} value={s._id}>{s.name}</option>
+                ))}
               </select>
             </div>
+
+            {selectedSubjectId && (
+              <div className="space-y-xs">
+                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Section</label>
+                <select
+                  value={selectedSectionId}
+                  onChange={(e) => {
+                    setSelectedSectionId(e.target.value)
+                    setTopicId('')
+                  }}
+                  className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
+                >
+                  <option value="">Select Section</option>
+                  {sections?.map((sec: any) => (
+                    <option key={sec._id} value={sec._id}>{sec.title}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {selectedSectionId && (
+              <div className="space-y-xs">
+                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Topic</label>
+                <select
+                  value={topicId}
+                  onChange={(e) => setTopicId(e.target.value)}
+                  className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
+                >
+                  <option value="">Select Topic</option>
+                  {filteredTopics?.map((t: any) => (
+                    <option key={t._id} value={t._id}>{t.title}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="space-y-xs">
               <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Title</label>
@@ -107,7 +196,7 @@ export default function CreateLesson(_props: CreateLessonProps) {
 
         <section className="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
           <div className="flex justify-between items-center mb-lg">
-            <h2 className="font-h2 text-h2">Practice Questions (10 required)</h2>
+            <h2 className="font-h2 text-h2">Practice Questions</h2>
             <button
               onClick={addQuestion}
               className="text-primary font-button text-button flex items-center gap-xs"

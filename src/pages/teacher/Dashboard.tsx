@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import { useQuery } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar, Card } from '../../components'
 
 interface User {
@@ -11,19 +14,17 @@ interface TeacherDashboardProps {
   user: User
 }
 
-const stats = {
-  activeLessons: 24,
-  totalStudents: 1492,
-}
-
-const lessons = [
-  { id: 1, title: 'Advanced Trigonometry Strategies', subject: 'Mathematics', status: 'published' },
-  { id: 2, title: 'Calculus Fundamentals', subject: 'Mathematics', status: 'draft' },
-  { id: 3, title: 'Algebraic Equations', subject: 'Mathematics', status: 'published' },
-  { id: 4, title: 'Geometry & Spatial Reasoning', subject: 'Mathematics', status: 'published' },
-]
-
 export default function TeacherDashboard({ user }: TeacherDashboardProps) {
+  const lessons = useQuery(api.teacher.getLessons, { createdBy: user.id as Id<"users"> })
+
+  const stats = {
+    activeLessons: lessons?.length || 0,
+    totalStudents: 1492, // Mock total students for now
+  }
+
+  if (lessons === undefined) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  }
   return (
     <div className="min-h-screen bg-surface">
       <TopAppBar title="Instructor Dashboard" user={user} />
@@ -86,23 +87,17 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
                 </thead>
                 <tbody className="font-body-md text-body-md text-on-surface">
                   {lessons.map((lesson) => (
-                    <tr key={lesson.id} className="border-b border-surface-variant hover:bg-surface-container-low transition-colors">
+                    <tr key={lesson._id} className="border-b border-surface-variant hover:bg-surface-container-low transition-colors">
                       <td className="p-md font-medium">{lesson.title}</td>
                       <td className="p-md">
                         <span className="bg-primary-container/20 text-primary-container px-2 py-1 rounded text-[12px] font-bold">
-                          {lesson.subject}
+                          Subject
                         </span>
                       </td>
                       <td className="p-md text-center">
-                        {lesson.status === 'published' ? (
-                          <span className="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant text-[12px] font-semibold">
-                            <span className="w-2 h-2 rounded-full bg-primary" /> Published
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant text-[12px] font-semibold">
-                            <span className="w-2 h-2 rounded-full bg-outline" /> Draft
-                          </span>
-                        )}
+                        <span className="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant text-[12px] font-semibold">
+                          <span className="w-2 h-2 rounded-full bg-primary" /> Published
+                        </span>
                       </td>
                       <td className="p-md text-right">
                         <button className="hover:text-primary transition-colors p-1">

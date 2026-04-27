@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useQuery, useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar } from '../../components'
 
 interface User {
@@ -12,90 +15,30 @@ interface QuizProps {
   user: User
 }
 
-const questions = [
-  {
-    id: 1,
-    question: 'Solve: 3x + 6 = 18',
-    options: ['x = 2', 'x = 4', 'x = 6', 'x = 8'],
-    correct: 1,
-    explanation: '3x + 6 = 18\n3x = 12\nx = 4',
-  },
-  {
-    id: 2,
-    question: 'What is the standard form of a linear equation?',
-    options: ['ax² + b = 0', 'ax + b = 0', 'ax + b > 0', 'ax - b = 0'],
-    correct: 1,
-    explanation: 'The standard form is ax + b = 0 where a ≠ 0',
-  },
-  {
-    id: 3,
-    question: 'Solve: 5x - 10 = 0',
-    options: ['x = 2', 'x = 5', 'x = 10', 'x = 0'],
-    correct: 1,
-    explanation: '5x - 10 = 0\n5x = 10\nx = 2',
-  },
-  {
-    id: 4,
-    question: 'If 2x + 3 = 7, find x',
-    options: ['1', '2', '3', '4'],
-    correct: 1,
-    explanation: '2x + 3 = 7\n2x = 4\nx = 2',
-  },
-  {
-    id: 5,
-    question: 'Solve: x/2 + 4 = 10',
-    options: ['x = 8', 'x = 10', 'x = 12', 'x = 14'],
-    correct: 2,
-    explanation: 'x/2 + 4 = 10\nx/2 = 6\nx = 12',
-  },
-  {
-    id: 6,
-    question: 'What value of x satisfies 4x = 20?',
-    options: ['3', '4', '5', '6'],
-    correct: 2,
-    explanation: '4x = 20\nx = 20/4 = 5',
-  },
-  {
-    id: 7,
-    question: 'Solve: 2(x + 3) = 10',
-    options: ['x = 2', 'x = 3', 'x = 4', 'x = 5'],
-    correct: 0,
-    explanation: '2(x + 3) = 10\nx + 3 = 5\nx = 2',
-  },
-  {
-    id: 8,
-    question: 'The solution to 3x - 9 = 0 is:',
-    options: ['x = 1', 'x = 2', 'x = 3', 'x = 4'],
-    correct: 2,
-    explanation: '3x - 9 = 0\n3x = 9\nx = 3',
-  },
-  {
-    id: 9,
-    question: 'Solve: x + 8 = 15',
-    options: ['x = 5', 'x = 6', 'x = 7', 'x = 8'],
-    correct: 2,
-    explanation: 'x + 8 = 15\nx = 15 - 8 = 7',
-  },
-  {
-    id: 10,
-    question: 'Find x if 2x - 4 = 8',
-    options: ['x = 4', 'x = 5', 'x = 6', 'x = 7'],
-    correct: 2,
-    explanation: '2x - 4 = 8\n2x = 12\nx = 6',
-  },
-]
-
 export default function Quiz(_props: QuizProps) {
   const { lessonId } = useParams()
   const [currentQ, setCurrentQ] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [showAnswer, setShowAnswer] = useState(false)
   const [score, setScore] = useState(0)
-  const [answers, setAnswers] = useState<number[]>([])
+  const [answers, setAnswers] = useState<string[]>([])
   const [completed, setCompleted] = useState(false)
+  const [submitResult, setSubmitResult] = useState<any>(null)
+
+  const data = useQuery(api.student.getLesson, { lessonId: lessonId as Id<"lessons"> })
+  const submitQuiz = useMutation(api.student.submitLessonQuiz)
+
+  if (data === undefined) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  }
+  const questions = data?.questions || []
+  if (questions.length === 0) {
+    return <div className="min-h-screen flex items-center justify-center">No questions found.</div>
+  }
 
   const question = questions[currentQ]
   const progress = ((currentQ + 1) / questions.length) * 100
+  const correctAnswerIndex = question.options.indexOf(question.correctAnswer)
 
   const handleSelect = (index: number) => {
     setSelected(index)
@@ -104,24 +47,30 @@ export default function Quiz(_props: QuizProps) {
   const handleSubmit = () => {
     if (selected === null) return
     setShowAnswer(true)
-    setAnswers([...answers, selected])
-    if (selected === question.correct) {
+    setAnswers([...answers, question.options[selected]])
+    if (selected === correctAnswerIndex) {
       setScore(score + 1)
     }
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1)
       setSelected(null)
       setShowAnswer(false)
     } else {
+      const result = await submitQuiz({
+        userId: _props.user.id as Id<"users">,
+        lessonId: lessonId as Id<"lessons">,
+        answers
+      })
+      setSubmitResult(result)
       setCompleted(true)
     }
   }
 
-  const finalScore = ((score / questions.length) * 100).toFixed(0)
-  const passed = parseInt(finalScore) >= 70
+  const finalScore = submitResult ? submitResult.score : ((score / questions.length) * 100).toFixed(0)
+  const passed = submitResult ? submitResult.passed : parseInt(finalScore as string) >= 70
 
   if (completed) {
     return (
@@ -186,7 +135,7 @@ export default function Quiz(_props: QuizProps) {
             {question.options.map((option, index) => {
               let optionClass = 'border-surface-variant hover:border-primary-fixed-dim hover:bg-surface-container-low'
               if (showAnswer) {
-                if (index === question.correct) {
+                if (index === correctAnswerIndex) {
                   optionClass = 'border-primary bg-primary-fixed'
                 } else if (index === selected) {
                   optionClass = 'border-error bg-error-container'
@@ -222,11 +171,11 @@ export default function Quiz(_props: QuizProps) {
           {showAnswer && (
             <div className="mt-lg pt-lg border-t border-surface-variant">
               <div className="flex items-center gap-sm mb-sm">
-                <span className={`material-symbols-outlined ${selected === question.correct ? 'text-primary' : 'text-error'}`}>
-                  {selected === question.correct ? 'check_circle' : 'cancel'}
+                <span className={`material-symbols-outlined ${selected === correctAnswerIndex ? 'text-primary' : 'text-error'}`}>
+                  {selected === correctAnswerIndex ? 'check_circle' : 'cancel'}
                 </span>
-                <span className={`font-button text-button ${selected === question.correct ? 'text-primary' : 'text-error'}`}>
-                  {selected === question.correct ? 'Correct!' : 'Incorrect'}
+                <span className={`font-button text-button ${selected === correctAnswerIndex ? 'text-primary' : 'text-error'}`}>
+                  {selected === correctAnswerIndex ? 'Correct!' : 'Incorrect'}
                 </span>
               </div>
               <p className="font-body-md text-body-md text-on-surface-variant">

@@ -1,25 +1,40 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
 
 export default function Register() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
+  const signUpMutation = useMutation(api.auth.signUp)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (password !== confirmPassword) {
-      alert('Passwords do not match')
+      setError('Passwords do not match')
       return
     }
     setIsLoading(true)
+    setError('')
     
-    setTimeout(() => {
+    try {
+      await signUpMutation({
+        email,
+        password,
+        name: name || email.split('@')[0], // Fallback if name is empty
+        role: 'student' // Default role for public registration
+      })
       navigate('/login')
+    } catch (err: any) {
+      setError(err.message || 'Error creating account')
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -39,6 +54,12 @@ export default function Register() {
         </header>
 
         <form className="space-y-lg" onSubmit={handleSubmit}>
+          {error && (
+            <div className="p-md bg-error-container text-on-error-container rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+          
           <div className="space-y-xs">
             <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
               Full Name
@@ -49,6 +70,8 @@ export default function Register() {
               </div>
               <input
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
                 required
                 className="block w-full h-12 pl-[44px] pr-md rounded-lg border border-outline bg-surface text-on-surface font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none"

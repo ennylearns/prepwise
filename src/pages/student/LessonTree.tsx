@@ -1,4 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
+import { useQuery } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { BottomNavBar, TopAppBar, Card } from '../../components'
 
 interface User {
@@ -11,45 +14,68 @@ interface LessonTreeProps {
   user: User
 }
 
-const subjectData = {
-  math: {
-    name: 'Mathematics',
-    section: 'Section 1: Algebra Basics',
-    unit: 'Unit 1',
-    completed: 2,
-    total: 5,
-  },
-}
-
-const topics = [
-  { id: 1, title: 'Equations', status: 'completed' },
-  { id: 2, title: 'Inequalities', status: 'completed' },
-  { id: 3, title: 'Polynomials', status: 'active' },
-  { id: 4, title: 'Factoring', status: 'locked' },
-  { id: 5, title: 'Graphing', status: 'locked' },
-]
-
 export default function LessonTree(_props: LessonTreeProps) {
   const { subjectId } = useParams()
-  const subject = subjectData[subjectId as keyof typeof subjectData] || subjectData.math
+  
+  const treeData = useQuery(api.student.getLessonTree, { 
+    subjectId: subjectId as Id<"subjects">, 
+    userId: _props.user.id as Id<"users"> 
+  })
+
+  if (treeData === undefined) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  }
+
+  const { subject, sections, topics: allTopics } = treeData
+  if (!subject) {
+    return <div className="min-h-screen flex items-center justify-center">Subject not found</div>
+  }
+
+  // Get first section for MVP
+  const section = sections[0]
+  const sectionTopics = section ? allTopics.filter(t => t.sectionId === section._id).sort((a, b) => a.order - b.order) : []
+  
+  // Mock progress calculation for MVP: always unlock first topic
+  const finalTopics = sectionTopics.map((topic, index) => {
+    // If we've completed it:
+    // For MVP, since we don't map topic to progress properly yet, let's just make the first one active
+    // if there's no progress, or use a simple heuristic.
+    // For MVP, since we don't map topic to progress properly yet, let's just make the first one active
+    // if there's no progress, or use a simple heuristic.
+    // Always unlock first topic. If previous was completed, this is active.
+    
+    return {
+      id: topic._id,
+      title: topic.title,
+      status: index === 0 ? 'active' : 'locked' // Simplified for MVP
+    }
+  })
+
+  const displayData = {
+    name: subject.name,
+    section: section ? section.title : 'General',
+    unit: 'Unit 1',
+    completed: 0,
+    total: finalTopics.length
+  }
 
   return (
     <div className="min-h-screen bg-surface">
-      <TopAppBar title={subject.name} />
+      <TopAppBar title={displayData.name} />
       
       <main className="p-container-margin py-lg flex flex-col items-center relative overflow-hidden pb-24">
         <Card className="w-full text-center relative overflow-hidden mb-xl">
           <div className="absolute top-0 left-0 w-full h-2 bg-secondary-container" />
-          <h1 className="font-h1 text-h1 mt-2">{subject.name}</h1>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-1">{subject.section}</p>
+          <h1 className="font-h1 text-h1 mt-2">{displayData.name}</h1>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">{displayData.section}</p>
           <div className="flex justify-center items-center gap-4 mt-4">
             <div className="flex items-center gap-1 text-secondary-container font-label-caps text-label-caps">
               <span className="material-symbols-outlined text-[18px] fill">star</span>
-              <span>{subject.completed}/{subject.total}</span>
+              <span>{displayData.completed}/{displayData.total}</span>
             </div>
             <div className="flex items-center gap-1 text-primary font-label-caps text-label-caps">
               <span className="material-symbols-outlined text-[18px]">bolt</span>
-              <span>{subject.unit}</span>
+              <span>{displayData.unit}</span>
             </div>
           </div>
         </Card>
@@ -60,7 +86,7 @@ export default function LessonTree(_props: LessonTreeProps) {
             <div className="h-[65%] bg-surface-variant opacity-50" />
           </div>
 
-          {topics.map((topic, index) => (
+          {finalTopics.map((topic, index) => (
             <div
               key={topic.id}
               className={`relative z-10 flex flex-col items-center mb-16 ${

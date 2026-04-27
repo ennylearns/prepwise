@@ -88,3 +88,27 @@ export const getTeacherLessons = query({
     return await ctx.db.query("lessons").collect()
   },
 })
+
+export const getTopics = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("topics").collect()
+  },
+})
+
+export const getSubjects = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("subjects").collect()
+  },
+})
+
+export const getSections = query({
+  args: { subjectId: v.id("subjects") },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("sections")
+      .withIndex("subjectId", (q) => q.eq("subjectId", args.subjectId))
+      .collect()
+  },
+})

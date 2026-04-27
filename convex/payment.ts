@@ -1,15 +1,13 @@
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || "sk_test_xxx"
-
 export const initializePayment = mutation({
   args: {
     userId: v.id("users"),
     email: v.string(),
     amount: v.number(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, _args) => {
     return {
       success: true,
       authorizationUrl: "https://paystack.gg/test",
@@ -22,7 +20,7 @@ export const verifyPayment = mutation({
   args: {
     reference: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, _args) => {
     return { success: true, plan: "premium" }
   },
 })

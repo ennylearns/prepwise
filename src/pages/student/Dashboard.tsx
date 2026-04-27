@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import { useQuery } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { BottomNavBar, TopAppBar, Card, ProgressBar } from '../../components'
 
 interface User {
@@ -12,19 +15,15 @@ interface DashboardProps {
   onLogout: () => void
 }
 
-const subjects = [
-  { id: 'math', name: 'Mathematics', icon: 'calculate', progress: 65, color: 'bg-blue-50 text-primary', tag: 'Core' },
-  { id: 'english', name: 'English', icon: 'menu_book', progress: 80, color: 'bg-tertiary-fixed text-tertiary', tag: 'Core' },
-  { id: 'physics', name: 'Physics', icon: 'science', progress: 40, color: 'bg-secondary-fixed text-secondary-container', tag: 'Science' },
-  { id: 'chemistry', name: 'Chemistry', icon: 'experiment', progress: 25, color: 'bg-error-container text-error', tag: 'Science' },
-]
-
-const stats = {
-  streak: 12,
-  topicsDone: 45,
-}
-
 export default function Dashboard({ user, onLogout }: DashboardProps) {
+  const dashboardData = useQuery(api.student.getDashboardData, { userId: user.id as Id<"users"> })
+
+  if (dashboardData === undefined) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  }
+
+  const { subjects, streak, topicsDone } = dashboardData
+  const stats = { streak, topicsDone }
   return (
     <div className="min-h-screen bg-surface">
       <TopAppBar user={user} onLogout={onLogout} />
@@ -64,8 +63,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
             {subjects.map((subject) => (
               <Link
-                key={subject.id}
-                to={`/subject/${subject.id}/tree`}
+                key={subject._id}
+                to={`/subject/${subject._id}/tree`}
                 className="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group block"
               >
                 <div className="flex justify-between items-start mb-md">

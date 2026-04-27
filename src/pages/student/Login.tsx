@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { signIn } from '../../lib/api'
-
+import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
 interface User {
   id: string
   email: string
@@ -17,6 +17,8 @@ export default function Login({ onLogin }: LoginProps) {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const signInMutation = useMutation(api.auth.signIn)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,27 +26,27 @@ export default function Login({ onLogin }: LoginProps) {
     setError('')
     
     try {
-      const result = await signIn(email, password)
+      const result = await signInMutation({ email, password })
       
-      if (result.success) {
+      if (result.success && result.user) {
         onLogin({
-          id: result.userId,
-          email: result.email,
-          role: result.role 
+          id: result.user._id,
+          email: result.user.email,
+          role: result.user.role 
         })
-      } else {
-        setError(result.error || 'Invalid credentials')
+        if (result.user.role === 'teacher') {
+          navigate('/teacher')
+        } else if (result.user.role === 'uploader') {
+          navigate('/uploader')
+        } else {
+          navigate('/dashboard')
+        }
       }
-    } catch (err) {
-      setError('Unable to connect. Using demo mode.')
-      // Fallback to demo mode for testing
-      onLogin({
-        id: 'demo-user',
-        email: email,
-        role: 'student' 
-      })
+    } catch (err: any) {
+      setError(err.message || 'Invalid credentials')
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (

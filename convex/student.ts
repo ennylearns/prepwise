@@ -1,14 +1,50 @@
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
+export const getDashboardData = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId)
+    if (!user) throw new Error("User not found")
+      
+    const subjects = await ctx.db.query("subjects").order("asc").collect()
+    const progress = await ctx.db
+      .query("progress")
+      .withIndex("userId", (q) => q.eq("userId", args.userId))
+      .collect()
+      
+    const topicsDone = progress.filter(p => p.status === "completed").length
+    
+    // Map subjects to include calculated progress
+    const enrichedSubjects = subjects.map(sub => {
+      // Very basic progress calculation per subject for MVP
+      // In a real app, we'd find all topics for this subject and compare
+      return {
+        _id: sub._id,
+        name: sub.name,
+        progress: Math.floor(Math.random() * 100), // Mock progress percentage
+        icon: sub.name === "Mathematics" ? "calculate" : sub.name === "English" ? "menu_book" : "science",
+        color: sub.name === "Mathematics" ? "bg-blue-50 text-primary" : sub.name === "English" ? "bg-tertiary-fixed text-tertiary" : "bg-secondary-fixed text-secondary-container",
+        tag: sub.name === "Mathematics" || sub.name === "English" ? "Core" : "Science"
+      }
+    })
+
+    return {
+      streak: user.streak || 0,
+      topicsDone,
+      subjects: enrichedSubjects
+    }
+  },
+})
+
 export const getLessonTree = query({
-  args: {},
-  handler: async (ctx) => {
-    const subjects = await ctx.db.query("subjects").collect()
-    const sections = await ctx.db.query("sections").collect()
-    const topics = await ctx.db.query("topics").collect()
-    const lessons = await ctx.db.query("lessons").collect()
-    return { subjects, sections, topics, lessons }
+  args: { subjectId: v.id("subjects"), userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const subject = await ctx.db.get(args.subjectId)
+    const sections = await ctx.db.query("sections").withIndex("subjectId", q => q.eq("subjectId", args.subjectId)).collect()
+    const topics = await ctx.db.query("topics").collect() // Need to filter by sectionId in app
+    const progress = await ctx.db.query("progress").withIndex("userId", q => q.eq("userId", args.userId)).collect()
+    return { subject, sections, topics, progress }
   },
 })
 

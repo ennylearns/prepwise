@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery, useMutation } from 'convex/react'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar } from '../../components'
 
 interface User {
@@ -12,26 +15,35 @@ interface CBTExamProps {
   user: User
 }
 
-const questions = Array.from({ length: 40 }, (_, i) => ({
-  id: i + 1,
-  subject: ['Physics', 'Chemistry', 'Mathematics', 'English'][i % 4],
-  question: `Question ${i + 1}: Sample JAMB question for practice test. (This is a placeholder question ${i + 1})`,
-  options: ['Option A', 'Option B', 'Option C', 'Option D'],
-  correct: Math.floor(Math.random() * 4),
-}))
-
-export default function CBTExam(_props: CBTExamProps) {
-  const [currentQ, setCurrentQ] = useState(12)
+export default function CBTExam({ user }: CBTExamProps) {
+  const [currentQ, setCurrentQ] = useState(1)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [flagged, setFlagged] = useState<number[]>([])
   const [timeLeft, setTimeLeft] = useState(2 * 60 * 60 + 45 * 60 + 22)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [finalScore, setFinalScore] = useState<number | null>(null)
+
+  // Fetch subjects to get subject IDs for mock exam
+  const dashboardData = useQuery(api.student.getDashboardData, { userId: user.id as Id<"users"> })
+  const subjectIds = dashboardData?.subjects.map(s => s._id) || []
+
+  // Skip the query if we don't have subjects yet
+  const questions = useQuery(api.student.getMockExam, subjectIds.length > 0 ? {
+    subjectIds,
+    count: 10 // For MVP, just get 10 questions to not overcomplicate the mock data
+  } : "skip")
+  
+  const submitExam = useMutation(api.student.submitMockExam)
 
   useEffect(() => {
     if (timeLeft <= 0 || isSubmitted) return
     const timer = setInterval(() => setTimeLeft(t => t - 1), 1000)
     return () => clearInterval(timer)
   }, [timeLeft, isSubmitted])
+
+  if (dashboardData === undefined || questions === undefined) {
+    return <div className="min-h-screen flex items-center justify-center">Loading Mock Exam...</div>
+  }
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600)
@@ -52,16 +64,32 @@ export default function CBTExam(_props: CBTExamProps) {
     }
   }
 
-  const handleSubmit = () => {
-    setIsSubmitted(true)
-  }
-
-  const calculateScore = () => {
+  const handleSubmit = async () => {
     let correct = 0
-    Object.entries(answers).forEach(([q, a]) => {
-      if (questions[parseInt(q) - 1].correct === a) correct++
+    const stringAnswers: string[] = []
+    
+    questions.forEach((q, index) => {
+      const selectedIndex = answers[index + 1]
+      if (selectedIndex !== undefined) {
+        const selectedOption = q.options[selectedIndex]
+        stringAnswers.push(selectedOption)
+        if (selectedOption === q.correctAnswer) correct++
+      } else {
+        stringAnswers.push("")
+      }
     })
-    return ((correct / questions.length) * 100).toFixed(0)
+    
+    const calculatedScore = Math.round((correct / questions.length) * 100)
+    setFinalScore(calculatedScore)
+    
+    await submitExam({
+      userId: user.id as Id<"users">,
+      subjectIds,
+      answers: stringAnswers,
+      score: calculatedScore
+    })
+    
+    setIsSubmitted(true)
   }
 
   const question = questions[currentQ - 1]
@@ -79,7 +107,7 @@ export default function CBTExam(_props: CBTExamProps) {
             
             <h1 className="font-display text-display mb-sm">Exam Complete!</h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant mb-lg">
-              You scored {calculateScore()}%
+              You scored {finalScore}%
             </p>
 
             <Link
@@ -120,7 +148,7 @@ export default function CBTExam(_props: CBTExamProps) {
           <div className="flex justify-between items-center pb-sm border-b border-surface-variant">
             <div className="flex items-center gap-sm">
               <span className="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-sm py-xs rounded-full">
-                {question.subject}
+                Subject {/* In full version, get real subject name from ID */}
               </span>
               <span className="font-body-sm text-body-sm text-on-surface-variant">Question {currentQ} of {questions.length}</span>
             </div>
@@ -139,7 +167,7 @@ export default function CBTExam(_props: CBTExamProps) {
             <h2 className="font-h1 text-h1 text-on-surface mb-md">{question.question}</h2>
             
             <div className="flex flex-col gap-sm">
-              {question.options.map((option, index) => (
+              {question.options.map((option: string, index: number) => (
                 <label
                   key={index}
                   className={`flex items-start gap-md p-md border-2 rounded-lg cursor-pointer transition-colors ${
@@ -205,7 +233,7 @@ export default function CBTExam(_props: CBTExamProps) {
             </div>
 
             <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-xs overflow-y-auto pr-xs">
-              {Array.from({ length: 40 }, (_, i) => {
+              {Array.from({ length: questions.length }, (_, i) => {
                 const qNum = i + 1
                 const isAnswered = answers[qNum] !== undefined
                 const isFlagged = flagged.includes(qNum)
