@@ -18,25 +18,15 @@ export default defineSchema({
     order: v.number(),
   }),
 
-  sections: defineTable({
+  lessons: defineTable({
     subjectId: v.string(),
     title: v.string(),
-    order: v.number(),
-  }).index("subjectId", ["subjectId"]),
-
-  topics: defineTable({
-    sectionId: v.string(),
-    title: v.string(),
-    order: v.number(),
-  }).index("sectionId", ["sectionId"]),
-
-  lessons: defineTable({
-    topicId: v.string(),
-    title: v.string(),
     content: v.string(),
+    order: v.number(),
+    isPublished: v.boolean(),
     createdBy: v.string(),
     createdAt: v.number(),
-  }).index("topicId", ["topicId"]),
+  }).index("subjectId", ["subjectId"]),
 
   lessonQuestions: defineTable({
     lessonId: v.string(),

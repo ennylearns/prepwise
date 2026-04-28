@@ -1,22 +1,20 @@
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
-export const createLesson = mutation({
+export const publishLesson = mutation({
   args: {
-    topicId: v.id("topics"),
-    title: v.string(),
+    lessonId: v.id("lessons"),
     content: v.string(),
     createdBy: v.id("users"),
   },
   handler: async (ctx, args) => {
-    const lessonId = await ctx.db.insert("lessons", {
-      topicId: args.topicId,
-      title: args.title,
+    await ctx.db.patch(args.lessonId, {
       content: args.content,
+      isPublished: true,
       createdBy: args.createdBy,
       createdAt: Date.now(),
     })
-    return lessonId
+    return args.lessonId
   },
 })
 
@@ -89,10 +87,14 @@ export const getTeacherLessons = query({
   },
 })
 
-export const getTopics = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("topics").collect()
+export const getAvailableLessons = query({
+  args: { subjectId: v.id("subjects") },
+  handler: async (ctx, args) => {
+    const lessons = await ctx.db
+      .query("lessons")
+      .withIndex("subjectId", (q) => q.eq("subjectId", args.subjectId))
+      .collect()
+    return lessons.filter((l) => !l.isPublished).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   },
 })
 
@@ -100,15 +102,5 @@ export const getSubjects = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("subjects").collect()
-  },
-})
-
-export const getSections = query({
-  args: { subjectId: v.id("subjects") },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("sections")
-      .withIndex("subjectId", (q) => q.eq("subjectId", args.subjectId))
-      .collect()
   },
 })

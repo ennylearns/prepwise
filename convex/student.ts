@@ -41,10 +41,10 @@ export const getLessonTree = query({
   args: { subjectId: v.id("subjects"), userId: v.id("users") },
   handler: async (ctx, args) => {
     const subject = await ctx.db.get(args.subjectId)
-    const sections = await ctx.db.query("sections").withIndex("subjectId", q => q.eq("subjectId", args.subjectId)).collect()
-    const topics = await ctx.db.query("topics").collect() // Need to filter by sectionId in app
+    const lessons = await ctx.db.query("lessons").withIndex("subjectId", q => q.eq("subjectId", args.subjectId)).collect()
+    const sortedLessons = lessons.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     const progress = await ctx.db.query("progress").withIndex("userId", q => q.eq("userId", args.userId)).collect()
-    return { subject, sections, topics, progress }
+    return { subject, lessons: sortedLessons, progress }
   },
 })
 

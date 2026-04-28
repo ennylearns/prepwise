@@ -26,37 +26,26 @@ export default function LessonTree(_props: LessonTreeProps) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
   }
 
-  const { subject, sections, topics: allTopics } = treeData
+  const { subject, lessons } = treeData
   if (!subject) {
     return <div className="min-h-screen flex items-center justify-center">Subject not found</div>
   }
 
-  // Get first section for MVP
-  const section = sections[0]
-  const sectionTopics = section ? allTopics.filter(t => t.sectionId === section._id).sort((a, b) => a.order - b.order) : []
-  
-  // Mock progress calculation for MVP: always unlock first topic
-  const finalTopics = sectionTopics.map((topic, index) => {
-    // If we've completed it:
-    // For MVP, since we don't map topic to progress properly yet, let's just make the first one active
-    // if there's no progress, or use a simple heuristic.
-    // For MVP, since we don't map topic to progress properly yet, let's just make the first one active
-    // if there's no progress, or use a simple heuristic.
-    // Always unlock first topic. If previous was completed, this is active.
-    
+  // Mock progress calculation for MVP: always unlock first lesson
+  const finalLessons = lessons.map((lesson: any, index: number) => {
     return {
-      id: topic._id,
-      title: topic.title,
+      id: lesson._id,
+      title: lesson.title,
       status: index === 0 ? 'active' : 'locked' // Simplified for MVP
     }
   })
 
   const displayData = {
     name: subject.name,
-    section: section ? section.title : 'General',
-    unit: 'Unit 1',
+    section: 'Curriculum',
+    unit: 'Start Learning',
     completed: 0,
-    total: finalTopics.length
+    total: finalLessons.length
   }
 
   return (
@@ -86,16 +75,16 @@ export default function LessonTree(_props: LessonTreeProps) {
             <div className="h-[65%] bg-surface-variant opacity-50" />
           </div>
 
-          {finalTopics.map((topic, index) => (
+          {finalLessons.map((lesson: any, index: number) => (
             <div
-              key={topic.id}
+              key={lesson.id}
               className={`relative z-10 flex flex-col items-center mb-16 ${
                 index % 2 === 0 ? '-translate-x-12' : index % 2 === 1 ? 'translate-x-16' : ''
               }`}
             >
-              {topic.status === 'completed' && (
+              {lesson.status === 'completed' && (
                 <Link
-                  to={`/lesson/${topic.id}`}
+                  to={`/lesson/${lesson.id}`}
                   className="w-[72px] h-[72px] rounded-full bg-primary flex items-center justify-center shadow-[0_8px_16px_rgba(0,63,177,0.2)] hover:scale-105 transition-transform active:scale-95 border-[4px] border-surface-bright ring-4 ring-primary-fixed relative"
                 >
                   <span className="material-symbols-outlined text-white text-3xl fill">done</span>
@@ -104,9 +93,9 @@ export default function LessonTree(_props: LessonTreeProps) {
                   </div>
                 </Link>
               )}
-              {topic.status === 'active' && (
+              {lesson.status === 'active' && (
                 <Link
-                  to={`/lesson/${topic.id}`}
+                  to={`/lesson/${lesson.id}`}
                   className="relative flex flex-col items-center"
                 >
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[72px] h-[72px] rounded-full bg-primary-fixed animate-ping opacity-75" />
@@ -116,15 +105,15 @@ export default function LessonTree(_props: LessonTreeProps) {
                       START
                     </div>
                   </button>
-                  <span className="mt-4 font-h2 text-h2 text-primary">{topic.title}</span>
+                  <span className="mt-4 font-h2 text-h2 text-primary max-w-[200px] text-center">{lesson.title}</span>
                 </Link>
               )}
-              {topic.status === 'locked' && (
+              {lesson.status === 'locked' && (
                 <div className="flex flex-col items-center">
                   <div className="w-[72px] h-[72px] rounded-full bg-surface-container-highest flex items-center justify-center border-[4px] border-surface-bright shadow-sm opacity-80 cursor-not-allowed">
                     <span className="material-symbols-outlined text-outline text-3xl">lock</span>
                   </div>
-                  <span className="mt-3 font-button text-button text-outline opacity-80">{topic.title}</span>
+                  <span className="mt-3 font-button text-button text-outline opacity-80 max-w-[200px] text-center">{lesson.title}</span>
                 </div>
               )}
             </div>

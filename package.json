@@ -9,11 +9,11 @@
     "preview": "vite preview",
     "convex:dev": "npx convex dev"
   },
-"dependencies": {
+  "dependencies": {
+    "convex": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "convex": "^1.10.0"
+    "react-router-dom": "^6.20.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
@@ -24,6 +24,7 @@
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10"
+    "vite": "^5.0.10",
+    "xlsx": "^0.18.5"
   }
 }

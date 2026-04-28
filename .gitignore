@@ -10,7 +10,17 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# Secrets and Environment Variables
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
 *.local
+auth_config.json
+*.pem
+*.key
+
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +35,4 @@ dist-ssr
 
 # Convex
 .convex/
+

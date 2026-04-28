@@ -26,21 +26,17 @@ export default function CreateLesson({ user }: CreateLessonProps) {
   const navigate = useNavigate()
   const subjects = useQuery(api.teacher.getSubjects)
   const [selectedSubjectId, setSelectedSubjectId] = useState('')
-  const sections = useQuery(
-    api.teacher.getSections,
+  
+  const availableLessons = useQuery(
+    api.teacher.getAvailableLessons,
     selectedSubjectId ? { subjectId: selectedSubjectId as Id<"subjects"> } : "skip"
   )
-  const [selectedSectionId, setSelectedSectionId] = useState('')
-  
-  const allTopics = useQuery(api.teacher.getTopics)
-  const filteredTopics = allTopics?.filter((t: any) => t.sectionId === selectedSectionId)
+  const [selectedLessonId, setSelectedLessonId] = useState('')
 
-  const createLessonMutation = useMutation(api.teacher.createLesson)
+  const publishLessonMutation = useMutation(api.teacher.publishLesson)
   const addLessonQuestionsMutation = useMutation(api.teacher.addLessonQuestions)
 
-  const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [topicId, setTopicId] = useState('')
   const [questions, setQuestions] = useState<QuestionType[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -63,8 +59,8 @@ export default function CreateLesson({ user }: CreateLessonProps) {
   }
 
   const handleSubmit = async () => {
-    if (!title || !content || !topicId) {
-      alert('Please fill in title, content, and select a topic.')
+    if (!content || !selectedLessonId) {
+      alert('Please fill in content and select a lesson.')
       return
     }
     if (questions.length < 1) { // MVP: Require at least 1 question
@@ -74,9 +70,8 @@ export default function CreateLesson({ user }: CreateLessonProps) {
     
     setIsLoading(true)
     try {
-      const newLessonId = await createLessonMutation({
-        topicId: topicId as Id<"topics">,
-        title,
+      const newLessonId = await publishLessonMutation({
+        lessonId: selectedLessonId as Id<"lessons">,
         content,
         createdBy: user.id as Id<"users">
       })
@@ -123,13 +118,12 @@ export default function CreateLesson({ user }: CreateLessonProps) {
                 value={selectedSubjectId}
                 onChange={(e) => {
                   setSelectedSubjectId(e.target.value)
-                  setSelectedSectionId('')
-                  setTopicId('')
+                  setSelectedLessonId('')
                 }}
                 className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
               >
                 <option value="">Select Subject</option>
-                {subjects?.map(s => (
+                {subjects?.map((s: any) => (
                   <option key={s._id} value={s._id}>{s.name}</option>
                 ))}
               </select>
@@ -137,49 +131,19 @@ export default function CreateLesson({ user }: CreateLessonProps) {
 
             {selectedSubjectId && (
               <div className="space-y-xs">
-                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Section</label>
+                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Title</label>
                 <select
-                  value={selectedSectionId}
-                  onChange={(e) => {
-                    setSelectedSectionId(e.target.value)
-                    setTopicId('')
-                  }}
+                  value={selectedLessonId}
+                  onChange={(e) => setSelectedLessonId(e.target.value)}
                   className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
                 >
-                  <option value="">Select Section</option>
-                  {sections?.map((sec: any) => (
-                    <option key={sec._id} value={sec._id}>{sec.title}</option>
+                  <option value="">Select Lesson</option>
+                  {availableLessons?.map((lesson: any) => (
+                    <option key={lesson._id} value={lesson._id}>{lesson.title}</option>
                   ))}
                 </select>
               </div>
             )}
-
-            {selectedSectionId && (
-              <div className="space-y-xs">
-                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Topic</label>
-                <select
-                  value={topicId}
-                  onChange={(e) => setTopicId(e.target.value)}
-                  className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
-                >
-                  <option value="">Select Topic</option>
-                  {filteredTopics?.map((t: any) => (
-                    <option key={t._id} value={t._id}>{t.title}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            <div className="space-y-xs">
-              <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., Introduction to Linear Equations"
-                className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
-              />
-            </div>
 
             <div className="space-y-xs">
               <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Content</label>

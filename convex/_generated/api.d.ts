@@ -9,11 +9,13 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as curriculumData from "../curriculumData.js";
 import type * as payment from "../payment.js";
 import type * as seed from "../seed.js";
 import type * as student from "../student.js";
 import type * as teacher from "../teacher.js";
 import type * as uploader from "../uploader.js";
+import type * as wipe from "../wipe.js";
 
 import type {
   ApiFromModules,
@@ -23,11 +25,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  curriculumData: typeof curriculumData;
   payment: typeof payment;
   seed: typeof seed;
   student: typeof student;
   teacher: typeof teacher;
   uploader: typeof uploader;
+  wipe: typeof wipe;
 }>;
 
 /**
