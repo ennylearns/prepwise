@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
-import { BottomNavBar, TopAppBar, Card, ProgressBar } from '../../components'
+import { BottomNavBar, TopAppBar, Card, ProgressBar, Sidebar } from '../../components'
 
 interface User {
   id: string
@@ -25,10 +25,13 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const { subjects, streak, topicsDone } = dashboardData
   const stats = { streak, topicsDone }
   return (
-    <div className="min-h-screen bg-surface">
-      <TopAppBar user={user} onLogout={onLogout} />
+    <div className="flex h-screen overflow-hidden bg-surface">
+      <Sidebar currentPath="/dashboard" role={user.role} user={user} onLogout={onLogout} />
       
-      <main className="p-container-margin md:p-lg space-y-xl pb-24">
+      <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
+        <TopAppBar user={user} onLogout={onLogout} />
+        
+        <main className="p-container-margin md:p-lg space-y-xl pb-24 flex-1">
         <section className="grid grid-cols-1 md:grid-cols-3 gap-md">
           <div className="col-span-1 md:col-span-2 bg-primary text-on-primary rounded-xl p-lg relative overflow-hidden flex flex-col justify-center shadow-[0_8px_16px_rgba(0,0,0,0.08)]">
             <div className="relative z-10">
@@ -120,6 +123,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
       </main>
 
       <BottomNavBar currentPath="/dashboard" />
+      </div>
     </div>
   )
 }

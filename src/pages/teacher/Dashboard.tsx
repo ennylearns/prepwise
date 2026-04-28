@@ -12,9 +12,10 @@ interface User {
 
 interface TeacherDashboardProps {
   user: User
+  onLogout: () => void
 }
 
-export default function TeacherDashboard({ user }: TeacherDashboardProps) {
+export default function TeacherDashboard({ user, onLogout }: TeacherDashboardProps) {
   const lessons = useQuery(api.teacher.getLessons, { createdBy: user.id as Id<"users"> })
 
   const stats = {
@@ -27,7 +28,7 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
   }
   return (
     <div className="min-h-screen bg-surface">
-      <TopAppBar title="Instructor Dashboard" user={user} />
+      <TopAppBar title="Instructor Dashboard" user={user} onLogout={onLogout} />
       
       <main className="p-container-margin py-lg space-y-lg">
         <section className="flex flex-col md:flex-row md:items-center justify-between gap-md">

@@ -45,6 +45,32 @@ export default function CBTExam({ user }: CBTExamProps) {
     return <div className="min-h-screen flex items-center justify-center">Loading Mock Exam...</div>
   }
 
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-surface">
+        <TopAppBar title="Mock Exams" showBack />
+        <main className="p-container-margin py-lg flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-xl text-center shadow-[0_2px_4px_rgba(0,0,0,0.04)] max-w-md">
+            <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-md">
+              <span className="material-symbols-outlined text-4xl text-on-secondary-container">pending_actions</span>
+            </div>
+            <h2 className="font-h2 text-h2 text-on-surface mb-sm">Coming Soon</h2>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-lg">
+              We are currently compiling past questions for your mock exams. Please check back later!
+            </p>
+            <Link
+              to="/dashboard"
+              className="w-full h-12 bg-primary text-on-primary font-button text-button rounded-full hover:opacity-90 transition-all flex items-center justify-center gap-sm"
+            >
+              <span className="material-symbols-outlined">arrow_back</span>
+              Back to Dashboard
+            </Link>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600)
     const m = Math.floor((seconds % 3600) / 60)

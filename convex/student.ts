@@ -16,18 +16,28 @@ export const getDashboardData = query({
     const topicsDone = progress.filter(p => p.status === "completed").length
     
     // Map subjects to include calculated progress
-    const enrichedSubjects = subjects.map(sub => {
-      // Very basic progress calculation per subject for MVP
-      // In a real app, we'd find all topics for this subject and compare
+    const enrichedSubjects = await Promise.all(subjects.map(async (sub) => {
+      const subjectLessons = await ctx.db
+        .query("lessons")
+        .withIndex("subjectId", (q) => q.eq("subjectId", sub._id))
+        .collect()
+        
+      const lessonIds = subjectLessons.map(l => l._id)
+      const completedSubjectLessons = progress.filter(p => p.status === "completed" && lessonIds.includes(p.lessonId as any))
+      
+      const progressPercent = subjectLessons.length > 0 
+        ? Math.floor((completedSubjectLessons.length / subjectLessons.length) * 100) 
+        : 0
+
       return {
         _id: sub._id,
         name: sub.name,
-        progress: Math.floor(Math.random() * 100), // Mock progress percentage
+        progress: progressPercent,
         icon: sub.name === "Mathematics" ? "calculate" : sub.name === "English" ? "menu_book" : "science",
         color: sub.name === "Mathematics" ? "bg-blue-50 text-primary" : sub.name === "English" ? "bg-tertiary-fixed text-tertiary" : "bg-secondary-fixed text-secondary-container",
         tag: sub.name === "Mathematics" || sub.name === "English" ? "Core" : "Science"
       }
-    })
+    }))
 
     return {
       streak: user.streak || 0,
@@ -96,6 +106,34 @@ export const submitLessonQuiz = mutation({
       score,
       completedAt: Date.now(),
     })
+
+    if (passed) {
+      const user = await ctx.db.get(args.userId)
+      if (user) {
+        const today = new Date().toISOString().split('T')[0]
+        let newStreak = user.streak || 0
+        
+        if (user.lastActivityDate !== today) {
+          if (user.lastActivityDate) {
+            const lastActivityDateObj = new Date(user.lastActivityDate)
+            const yesterday = new Date()
+            yesterday.setDate(yesterday.getDate() - 1)
+            if (lastActivityDateObj.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0]) {
+              newStreak += 1
+            } else {
+              newStreak = 1
+            }
+          } else {
+            newStreak = 1
+          }
+          await ctx.db.patch(user._id, {
+            lastActivityDate: today,
+            streak: newStreak
+          })
+        }
+      }
+    }
+
     return { score, passed, correct, total: questions.length }
   },
 })

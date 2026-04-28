@@ -32,17 +32,17 @@ function App() {
         
         <Route path="/dashboard" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/subjects" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
-        <Route path="/subject/:subjectId/tree" element={user ? <LessonTree user={user} /> : <Navigate to="/login" />} />
-        <Route path="/lesson/:lessonId" element={user ? <LessonView user={user} /> : <Navigate to="/login" />} />
-        <Route path="/lesson/:lessonId/quiz" element={user ? <Quiz user={user} /> : <Navigate to="/login" />} />
-        <Route path="/exam" element={user ? <CBTExam user={user} /> : <Navigate to="/login" />} />
-        <Route path="/progress" element={user ? <Progress user={user} /> : <Navigate to="/login" />} />
-        <Route path="/upgrade" element={user ? <Upgrade user={user} /> : <Navigate to="/login" />} />
+        <Route path="/subject/:subjectId/tree" element={user ? <LessonTree user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/lesson/:lessonId" element={user ? <LessonView user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/lesson/:lessonId/quiz" element={user ? <Quiz user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/exam" element={user ? <CBTExam user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/progress" element={user ? <Progress user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/upgrade" element={user ? <Upgrade user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         
-        <Route path="/teacher" element={user?.role === 'teacher' ? <TeacherDashboard user={user} /> : <Navigate to="/login" />} />
-        <Route path="/teacher/lessons/create" element={user?.role === 'teacher' ? <CreateLesson user={user} /> : <Navigate to="/login" />} />
+        <Route path="/teacher" element={user?.role === 'teacher' ? <TeacherDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/teacher/lessons/create" element={user?.role === 'teacher' ? <CreateLesson user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         
-        <Route path="/uploader" element={user?.role === 'uploader' ? <UploaderDashboard user={user} /> : <Navigate to="/login" />} />
+        <Route path="/uploader" element={user?.role === 'uploader' ? <UploaderDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>

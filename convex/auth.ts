@@ -49,27 +49,6 @@ export const signIn = mutation({
       throw new Error("Invalid email or password")
     }
 
-    // Update last activity for streak tracking
-    const today = new Date().toISOString().split('T')[0]
-    let newStreak = user.streak
-    if (user.lastActivityDate !== today) {
-      // Basic streak logic
-      const lastActivityDateObj = new Date(user.lastActivityDate)
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      if (lastActivityDateObj.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0]) {
-        newStreak += 1
-      } else {
-        newStreak = 1
-      }
-      await ctx.db.patch(user._id, {
-        lastActivityDate: today,
-        streak: newStreak
-      })
-      user.streak = newStreak
-      user.lastActivityDate = today
-    }
-
     return { success: true, user }
   },
 })

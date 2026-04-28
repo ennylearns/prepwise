@@ -37,9 +37,11 @@ export function BottomNavBar({ currentPath }: BottomNavBarProps) {
 interface SidebarProps {
   currentPath: string
   role: string
+  user?: { email: string } | null
+  onLogout?: () => void
 }
 
-export function Sidebar({ currentPath, role }: SidebarProps) {
+export function Sidebar({ currentPath, role, user, onLogout }: SidebarProps) {
   const studentNav = [
     { path: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
     { path: '/subjects', icon: 'menu_book', label: 'Practice' },
@@ -83,6 +85,22 @@ export function Sidebar({ currentPath, role }: SidebarProps) {
           </li>
         ))}
       </ul>
+      <div className="mt-auto pt-4 border-t border-surface-variant flex flex-col gap-sm">
+        {user && (
+          <div className="px-3 text-sm text-on-surface-variant truncate">
+            {user.email}
+          </div>
+        )}
+        {onLogout && (
+          <button 
+            onClick={onLogout}
+            className="flex items-center gap-md px-3 py-2 rounded-lg font-body-md transition-colors text-error hover:bg-error-container hover:text-on-error-container w-full text-left"
+          >
+            <span className="material-symbols-outlined">logout</span>
+            Logout
+          </button>
+        )}
+      </div>
     </nav>
   )
 }

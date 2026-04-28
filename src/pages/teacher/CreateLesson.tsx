@@ -13,6 +13,7 @@ interface User {
 
 interface CreateLessonProps {
   user: User
+  onLogout: () => void
 }
 
 type QuestionType = {
@@ -22,7 +23,7 @@ type QuestionType = {
   explanation: string
 }
 
-export default function CreateLesson({ user }: CreateLessonProps) {
+export default function CreateLesson({ user, onLogout }: CreateLessonProps) {
   const navigate = useNavigate()
   const subjects = useQuery(api.teacher.getSubjects)
   const [selectedSubjectId, setSelectedSubjectId] = useState('')
@@ -105,7 +106,7 @@ export default function CreateLesson({ user }: CreateLessonProps) {
 
   return (
     <div className="min-h-screen bg-surface">
-      <TopAppBar title="Create Lesson" showBack />
+      <TopAppBar title="Create Lesson" showBack user={user} onLogout={onLogout} />
       
       <main className="p-container-margin py-lg space-y-lg max-w-3xl mx-auto pb-24">
         <section className="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
