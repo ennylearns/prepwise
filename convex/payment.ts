@@ -4,7 +4,7 @@ import { v } from "convex/values"
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || ""
 const PAYSTACK_BASE_URL = "https://api.paystack.co"
-const SITE_URL = process.env.CONVEX_SITE_URL || ""
+const CALLBACK_URL = process.env.CALLBACK_URL || process.env.CONVEX_SITE_URL || ""
 
 async function callPaystackApi(endpoint: string, method: string, body?: object) {
   const response = await fetch(`${PAYSTACK_BASE_URL}${endpoint}`, {
@@ -68,12 +68,12 @@ export const initializeSubscription = action({
   handler: async (_ctx, args) => {
     if (!PAYSTACK_SECRET_KEY) {
       console.log("DEBUG - PAYSTACK_SECRET_KEY: UNDEFINED")
-      console.log("DEBUG - SITE_URL:", SITE_URL)
+      console.log("DEBUG - CALLBACK_URL:", CALLBACK_URL)
       return { success: false, error: "Payment not configured" }
     }
 
     console.log("DEBUG - PAYSTACK_SECRET_KEY: SET")
-    console.log("DEBUG - SITE_URL:", SITE_URL)
+    console.log("DEBUG - CALLBACK_URL:", CALLBACK_URL)
     console.log("DEBUG - plan being initialized:", args.plan)
 
     const planCode = getPlanCode(args.plan)
@@ -84,7 +84,7 @@ export const initializeSubscription = action({
         email: args.email,
         amount: getPlanAmount(args.plan),
         reference,
-        callback_url: `${SITE_URL}/payment-callback`,
+        callback_url: `${CALLBACK_URL}/payment-callback`,
         plan: planCode,
         metadata: {
           userId: args.userId,
@@ -107,7 +107,7 @@ export const initializeSubscription = action({
         email: args.email,
         amount: getPlanAmount(args.plan),
         reference,
-        callback_url: `${SITE_URL}/payment-callback`,
+        callback_url: `${CALLBACK_URL}/payment-callback`,
         plan: planCode,
       })
       return { success: false, error: "Failed to initialize payment" }
