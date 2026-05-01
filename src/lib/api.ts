@@ -45,8 +45,11 @@ export const addLessonQuestions = (lessonId: string, questions: any[]) =>
 export const addPastQuestion = (subjectId: string, year: number, question: string, options: string[], correctAnswer: string, explanation: string) => 
   convexAction("addPastQuestion", { subjectId, year, question, options, correctAnswer, explanation })
 
-export const initializePayment = (userId: string, email: string, amount: number) => 
-  convexAction("initializePayment", { userId, email, amount })
+export const initializePayment = (userId: string, email: string, plan: "monthly" | "annual") => 
+  convexAction("initializePayment", { userId, email, plan })
 
-export const verifyPayment = (reference: string) => 
-  convexAction("verifyPayment", { reference })
+export const verifyPayment = (userId: string, reference: string, plan: "monthly" | "annual") => 
+  convexAction("verifyPayment", { userId, reference, plan })
+
+export const getSubscription = (userId: string) => 
+  convexAction("getSubscription", { userId })

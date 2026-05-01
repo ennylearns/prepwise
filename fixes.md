@@ -11,3 +11,4 @@ Streaks should only increase after a lesson is complete (create a helper functio
 - Remove the total students stat from the analytics on the teacher dashboard.
 - Work on the payments and paystack connection. 
 - After a lesson is completed, the student should be redirected to the lessons page instead of the dashboard.
+- Migrate to a better auth service. The current one does not manage sessions well.

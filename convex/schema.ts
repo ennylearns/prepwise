@@ -67,11 +67,16 @@ export default defineSchema({
   }).index("userId", ["userId"]),
 
   subscriptions: defineTable({
-    userId: v.string(),
-    status: v.string(),
-    plan: v.string(),
-    reference: v.string(),
+    userId: v.id("users"),
+    subscriptionCode: v.string(),
+    customerCode: v.string(),
+    planCode: v.string(),
+    plan: v.union(v.literal("monthly"), v.literal("annual")),
+    status: v.union(v.literal("active"), v.literal("cancelled"), v.literal("expired")),
+    authorizationCode: v.string(),
+    nextPaymentDate: v.number(),
     startDate: v.number(),
-    endDate: v.number(),
-  }).index("userId", ["userId"]),
+  }).index("userId", ["userId"])
+    .index("subscriptionCode", ["subscriptionCode"])
+    .index("customerCode", ["customerCode"]),
 })

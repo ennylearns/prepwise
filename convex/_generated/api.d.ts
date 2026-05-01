@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as curriculumData from "../curriculumData.js";
+import type * as http from "../http.js";
 import type * as payment from "../payment.js";
 import type * as seed from "../seed.js";
 import type * as student from "../student.js";
@@ -26,6 +27,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   curriculumData: typeof curriculumData;
+  http: typeof http;
   payment: typeof payment;
   seed: typeof seed;
   student: typeof student;
