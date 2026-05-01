@@ -19,7 +19,7 @@ async function callPaystackApi(endpoint: string, method: string, body?: object) 
 }
 
 function getPlanCode(plan: "monthly" | "annual"): string {
-  return plan === "monthly" ? "PLN_monthly" : "PLN_annual"
+  return plan === "monthly" ? "PLN_lt586onw2cm0kb6" : "PLN_72f50ay3trvi9tb"
 }
 
 function getPlanAmount(plan: "monthly" | "annual"): number {
