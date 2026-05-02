@@ -20,11 +20,15 @@ async function callPaystackApi(endpoint: string, method: string, body?: object) 
 }
 
 function getPlanCode(plan: "monthly" | "annual"): string {
-  return plan === "monthly" ? "PLN_lt586onw2cm0kb6" : "PLN_72f50ay3trvi9tb"
+  return plan === "monthly"
+    ? process.env.PAYSTACK_MONTHLY_PLAN_CODE!
+    : process.env.PAYSTACK_ANNUAL_PLAN_CODE!
 }
 
 function getPlanAmount(plan: "monthly" | "annual"): number {
-  return plan === "monthly" ? 150000 : 1500000
+  return plan === "monthly"
+    ? parseInt(process.env.PAYSTACK_MONTHLY_AMOUNT || "150000")
+    : parseInt(process.env.PAYSTACK_ANNUAL_AMOUNT || "1500000")
 }
 
 export const createPlans = action({
