@@ -1,6 +1,7 @@
 import { action, query, internalMutation, internalQuery } from "./_generated/server"
 import { internal } from "./_generated/api"
 import { v } from "convex/values"
+import { Id } from "./_generated/dataModel"
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || ""
 const PAYSTACK_BASE_URL = "https://api.paystack.co"
@@ -147,6 +148,59 @@ export const verifyPayment = action({
           authorizationCode,
           subscriptionCode: subscriptionCode || "",
           plan: args.plan,
+          nextPaymentDate,
+        })
+
+        return { success: true }
+      } else {
+        return { success: false, error: "Payment not confirmed" }
+      }
+    } catch (error) {
+      return { success: false, error: "Verification failed" }
+    }
+  },
+})
+
+export const verifyPaymentByReference = action({
+  args: {
+    reference: v.string(),
+  },
+  handler: async (ctx, args) => {
+    if (!PAYSTACK_SECRET_KEY) {
+      return { success: false, error: "Payment not configured" }
+    }
+
+    const parts = args.reference.split('_')
+    if (parts.length < 2 || parts[0] !== 'prepwise') {
+      return { success: false, error: "Invalid reference format" }
+    }
+
+    const userId = parts[1] as Id<"users">
+
+    try {
+      const result = await callPaystackApi(`/transaction/verify/${args.reference}`, "GET")
+
+      if (result.status && result.data.status === "success") {
+        const data = result.data
+        const customerCode = data.customer?.code || `CUS_${userId}`
+        const authorizationCode = data.authorization?.authorization_code || data.authorization_code
+
+        // Get plan from Paystack metadata (stored during initializeSubscription)
+        const plan = (data.metadata?.plan as "monthly" | "annual") || "monthly"
+        
+        const subscriptionCode = data.subscription?.id || data.subscription_code
+        const nextPaymentDate = data.subscription?.next_payment_date
+          ? new Date(data.subscription.next_payment_date).getTime()
+          : (plan === "monthly"
+            ? Date.now() + 30 * 24 * 60 * 60 * 1000
+            : Date.now() + 365 * 24 * 60 * 60 * 1000)
+
+        await ctx.runMutation(internal.payment.createSubscriptionRecord, {
+          userId,
+          customerCode,
+          authorizationCode,
+          subscriptionCode: subscriptionCode || "",
+          plan,
           nextPaymentDate,
         })
 

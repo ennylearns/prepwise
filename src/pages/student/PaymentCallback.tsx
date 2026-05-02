@@ -2,44 +2,30 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useAction } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
-import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar } from '../../components'
 
-interface User {
-  id: string
-  email: string
-  role: string
-}
-
-interface PaymentCallbackProps {
-  user: User
-}
-
-export default function PaymentCallback({ user }: PaymentCallbackProps) {
+export default function PaymentCallback() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('Verifying your payment...')
 
-  const reference = searchParams.get('reference')
-  const plan = searchParams.get('plan') as 'monthly' | 'annual' | null
+  // Paystack uses 'trxref' parameter, but also accept 'reference'
+  const reference = searchParams.get('trxref') || searchParams.get('reference')
 
-  const verifyPaymentAction = useAction(api.payment.verifyPayment)
+  const verifyPaymentByReferenceAction = useAction(api.payment.verifyPaymentByReference)
 
   useEffect(() => {
     const verifyPayment = async () => {
-      if (!reference || !plan) {
+      if (!reference) {
         setStatus('error')
         setMessage('Invalid callback. Please try again.')
         return
       }
 
       try {
-        const planType = plan === 'annual' ? 'annual' : 'monthly'
-        const result = await verifyPaymentAction({
-          userId: user.id as Id<"users">,
+        const result = await verifyPaymentByReferenceAction({
           reference,
-          plan: planType,
         })
 
         if (result.success) {
@@ -59,7 +45,7 @@ export default function PaymentCallback({ user }: PaymentCallbackProps) {
     }
 
     verifyPayment()
-  }, [reference, plan, user.id, verifyPaymentAction, navigate])
+  }, [reference, verifyPaymentByReferenceAction, navigate])
 
   return (
     <div className="min-h-screen bg-surface">

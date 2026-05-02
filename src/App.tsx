@@ -39,7 +39,7 @@ function App() {
         <Route path="/exam" element={user ? <CBTExam user={user} /> : <Navigate to="/login" />} />
         <Route path="/progress" element={user ? <Progress user={user} /> : <Navigate to="/login" />} />
         <Route path="/upgrade" element={user ? <Upgrade user={user} /> : <Navigate to="/login" />} />
-        <Route path="/payment-callback" element={user ? <PaymentCallback user={user} /> : <Navigate to="/login" />} />
+        <Route path="/payment-callback" element={<PaymentCallback />} />
         
         <Route path="/teacher" element={user?.role === 'teacher' ? <TeacherDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/teacher/lessons/create" element={user?.role === 'teacher' ? <CreateLesson user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
