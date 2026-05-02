@@ -68,14 +68,8 @@ export const initializeSubscription = action({
   },
   handler: async (_ctx, args) => {
     if (!PAYSTACK_SECRET_KEY) {
-      console.log("DEBUG - PAYSTACK_SECRET_KEY: UNDEFINED")
-      console.log("DEBUG - CALLBACK_URL:", CALLBACK_URL)
       return { success: false, error: "Payment not configured" }
     }
-
-    console.log("DEBUG - PAYSTACK_SECRET_KEY: SET")
-    console.log("DEBUG - CALLBACK_URL:", CALLBACK_URL)
-    console.log("DEBUG - plan being initialized:", args.plan)
 
     const planCode = getPlanCode(args.plan)
     const reference = `prepwise_${args.userId}_${Date.now()}`
@@ -103,14 +97,6 @@ export const initializeSubscription = action({
         return { success: false, error: result.message }
       }
     } catch (error) {
-      console.log("PAYSTACK ERROR:", error)
-      console.log("Request details:", {
-        email: args.email,
-        amount: getPlanAmount(args.plan),
-        reference,
-        callback_url: `${CALLBACK_URL}/payment-callback`,
-        plan: planCode,
-      })
       return { success: false, error: "Failed to initialize payment" }
     }
   },

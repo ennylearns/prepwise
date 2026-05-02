@@ -1,20 +1,70 @@
-"use node";
-
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
 
-const crypto = require('crypto')
-
-function hashPassword(password: string): string {
-  const salt = crypto.randomBytes(16).toString('hex')
-  const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
-  return `${salt}:${hash}`
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    { name: "PBKDF2" },
+    false,
+    ["deriveBits"]
+  )
+  
+  const derivedBits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations: 100000,
+      hash: "SHA-512",
+    },
+    key,
+    64 * 8
+  )
+  
+  const hash = Array.from(new Uint8Array(derivedBits))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  const saltHex = Array.from(salt)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  return `${saltHex}:${hash}`
 }
 
-function verifyPassword(password: string, storedHash: string): boolean {
-  const [salt, hash] = storedHash.split(':')
-  const newHash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
-  return hash === newHash
+async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
+  const [saltHex, hashHex] = storedHash.split(':')
+  
+  const salt = new Uint8Array(saltHex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)))
+  const encoder = new TextEncoder()
+  
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    { name: "PBKDF2" },
+    false,
+    ["deriveBits"]
+  )
+  
+  const derivedBits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations: 100000,
+      hash: "SHA-512",
+    },
+    key,
+    64 * 8
+  )
+  
+  const computedHash = Array.from(new Uint8Array(derivedBits))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  return hashHex === computedHash
 }
 
 export const signUp = mutation({
@@ -34,7 +84,7 @@ export const signUp = mutation({
       throw new Error("Email already in use")
     }
 
-    const hashedPassword = hashPassword(args.password)
+    const hashedPassword = await hashPassword(args.password)
 
     const userId = await ctx.db.insert("users", {
       email: args.email,
@@ -63,7 +113,7 @@ export const signIn = mutation({
       .withIndex("email", (q) => q.eq("email", args.email))
       .first()
 
-    if (!user || !verifyPassword(args.password, user.password)) {
+    if (!user || !(await verifyPassword(args.password, user.password))) {
       throw new Error("Invalid email or password")
     }
 
