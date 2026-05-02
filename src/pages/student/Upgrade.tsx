@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAction } from 'convex/react'
+import { useAction, useQuery } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
 import { TopAppBar, Button } from '../../components'
@@ -23,6 +23,10 @@ export default function Upgrade({ user }: UpgradeProps) {
   const [error, setError] = useState<string | null>(null)
 
   const initializeSubscriptionAction = useAction(api.payment.initializeSubscription)
+  const subscription = useQuery(api.payment.getSubscription, { userId: user.id as Id<"users"> })
+  
+  const isPremium = subscription?.status === 'premium'
+  const subscriptionPlan = subscription?.plan
 
   const plans = {
     monthly: {
@@ -66,19 +70,37 @@ export default function Upgrade({ user }: UpgradeProps) {
       <TopAppBar title="Go Premium" showBack />
 
       <main className="p-container-margin py-lg flex flex-col items-center max-w-5xl mx-auto">
-        <section className="text-center w-full max-w-2xl mb-xl">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container mb-md shadow-sm">
-            <span className="material-symbols-outlined text-[32px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-              workspace_premium
-            </span>
-          </div>
-          <h1 className="font-display text-display mb-sm">Go Premium</h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant">
-            Unlock your full potential and ace your exams with unlimited tools and resources.
-          </p>
-        </section>
-
-        <section className="w-full max-w-md mb-lg">
+        {isPremium && subscriptionPlan ? (
+          <section className="w-full max-w-md text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-md">
+              <span className="material-symbols-outlined text-[32px] text-green-600" style={{ fontVariationSettings: "'FILL' 1" }}>
+                check_circle
+              </span>
+            </div>
+            <h1 className="font-display text-display mb-sm text-on-surface">You're a Premium Member!</h1>
+            <p className="font-body-lg text-body-lg text-on-surface-variant mb-lg">
+              Thank you for your subscription. You have full access to all premium features.
+            </p>
+            <div className="bg-surface-container rounded-xl p-lg mb-lg text-left">
+              <div className="flex justify-between items-center py-md border-b border-outline-variant">
+                <span className="font-body-md text-on-surface">Current Plan</span>
+                <span className="font-body-md font-medium text-primary">
+                  {subscriptionPlan === 'annual' ? 'Premium Annual' : 'Premium Monthly'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-md">
+                <span className="font-body-md text-on-surface">Status</span>
+                <span className="font-body-md font-medium text-green-600">Active</span>
+              </div>
+            </div>
+            <a href="/dashboard" className="inline-flex items-center justify-center w-full py-md bg-primary text-on-primary rounded-lg font-body-md hover:opacity-90 transition-opacity">
+              Go to Dashboard
+              <span className="material-symbols-outlined ml-sm">arrow_forward</span>
+            </a>
+          </section>
+        ) : (
+          <>
+          <section className="w-full max-w-md mb-lg">
           <div className="flex rounded-xl bg-surface-container p-xs gap-xs">
             <button
               onClick={() => setSelectedPlan('monthly')}
@@ -203,6 +225,8 @@ export default function Upgrade({ user }: UpgradeProps) {
             <span className="font-body-sm text-body-sm">Secure Payment via Paystack</span>
           </div>
         </section>
+        </>
+        )}
       </main>
     </div>
   )

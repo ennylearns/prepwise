@@ -10,8 +10,7 @@ http.route({
   path: "/webhooks/paystack",
   method: "POST",
   handler: httpAction(async (ctx, req) => {
-    const bodyBytes = await req.bytes()
-    const bodyStr = new TextDecoder().decode(bodyBytes)
+    const bodyStr = await req.text()
     const signature = req.headers.get("x-paystack-signature")
 
     if (!signature) {
