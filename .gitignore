@@ -36,3 +36,7 @@ auth_config.json
 # Convex
 .convex/
 
+
+#guides
+deployment_guide.md
+
