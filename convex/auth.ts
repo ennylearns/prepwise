@@ -1,10 +1,26 @@
+"use node";
+
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
+
+const crypto = require('crypto')
+
+function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString('hex')
+  const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+  return `${salt}:${hash}`
+}
+
+function verifyPassword(password: string, storedHash: string): boolean {
+  const [salt, hash] = storedHash.split(':')
+  const newHash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+  return hash === newHash
+}
 
 export const signUp = mutation({
   args: {
     email: v.string(),
-    password: v.string(), // In production, this should be hashed
+    password: v.string(),
     name: v.string(),
     role: v.string(),
   },
@@ -18,9 +34,11 @@ export const signUp = mutation({
       throw new Error("Email already in use")
     }
 
+    const hashedPassword = hashPassword(args.password)
+
     const userId = await ctx.db.insert("users", {
       email: args.email,
-      password: args.password, // Plain text for MVP as requested, hash in prod
+      password: hashedPassword,
       name: args.name,
       role: args.role,
       subscriptionStatus: "free",
@@ -45,7 +63,7 @@ export const signIn = mutation({
       .withIndex("email", (q) => q.eq("email", args.email))
       .first()
 
-    if (!user || user.password !== args.password) {
+    if (!user || !verifyPassword(args.password, user.password)) {
       throw new Error("Invalid email or password")
     }
 
@@ -56,6 +74,10 @@ export const signIn = mutation({
 export const getUser = query({
   args: { userId: v.id("users") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) {
+      throw new Error("Unauthorized")
+    }
     return await ctx.db.get(args.userId)
   },
 })
