@@ -16,7 +16,11 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('Passwords do not match. Please re-enter your password.')
+      return
+    }
+    if (!email || !password) {
+      setError('Please enter your email and password.')
       return
     }
     setIsLoading(true)
@@ -31,7 +35,15 @@ export default function Register() {
       })
       navigate('/login')
     } catch (err: any) {
-      setError(err.message || 'Error creating account')
+      const errorMessage = err.message || ''
+      
+      if (errorMessage.includes('Email already in use')) {
+        setError('An account with this email already exists. Please sign in instead.')
+      } else if (errorMessage.includes('server') || errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        setError('Connection issue. Please check your internet and try again.')
+      } else {
+        setError('Unable to create account. Please check your details and try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -55,7 +67,8 @@ export default function Register() {
 
         <form className="space-y-lg" onSubmit={handleSubmit}>
           {error && (
-            <div className="p-md bg-error-container text-on-error-container rounded-lg text-sm">
+            <div className="p-md bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 flex items-center gap-sm">
+              <span className="material-symbols-outlined text-[20px]">error</span>
               {error}
             </div>
           )}

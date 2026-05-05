@@ -24,6 +24,12 @@ export default function Login({ onLogin }: LoginProps) {
     e.preventDefault()
     setIsLoading(true)
     setError('')
+
+    if (!email || !password) {
+      setError('Please enter your email and password.')
+      setIsLoading(false)
+      return
+    }
     
     try {
       const result = await signInMutation({ email, password })
@@ -43,7 +49,17 @@ export default function Login({ onLogin }: LoginProps) {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Invalid credentials')
+      const errorMessage = err.message || ''
+      
+      if (errorMessage.includes('Invalid email or password')) {
+        setError('Invalid email or password. Please check your credentials.')
+      } else if (errorMessage.includes('server') || errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        setError('Connection issue. Please check your internet and try again.')
+      } else if (errorMessage.includes('rate')) {
+        setError('Too many attempts. Please wait a moment and try again.')
+      } else {
+        setError('Unable to sign in. Please check your credentials and try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -67,7 +83,8 @@ export default function Login({ onLogin }: LoginProps) {
 
         <form className="space-y-lg" onSubmit={handleSubmit}>
           {error && (
-            <div className="p-md bg-error-container text-on-error-container rounded-lg text-sm">
+            <div className="p-md bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 flex items-center gap-sm">
+              <span className="material-symbols-outlined text-[20px]">error</span>
               {error}
             </div>
           )}
