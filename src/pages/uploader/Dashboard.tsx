@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { TopAppBar, Card } from '../../components'
 
 interface User {
@@ -33,13 +34,13 @@ export default function UploaderDashboard({ user }: UploaderDashboardProps) {
             <h1 className="font-h1 text-h1">Dashboard</h1>
             <p className="font-body-md text-body-md text-on-surface-variant mt-1">Manage JAMB past questions database.</p>
           </div>
-          <a
-            href="/uploader/questions"
+          <Link
+            to="/uploader/questions"
             className="bg-primary text-on-primary font-button text-button px-lg py-sm rounded-full hover:opacity-90 transition-colors flex items-center justify-center gap-xs shadow-[0_4px_12px_rgba(0,63,177,0.2)]"
           >
             <span className="material-symbols-outlined text-[20px]">add</span>
             Add Question
-          </a>
+          </Link>
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-md">

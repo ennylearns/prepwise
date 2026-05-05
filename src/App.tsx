@@ -13,6 +13,7 @@ import PaymentCallback from './pages/student/PaymentCallback'
 import TeacherDashboard from './pages/teacher/Dashboard'
 import CreateLesson from './pages/teacher/CreateLesson'
 import UploaderDashboard from './pages/uploader/Dashboard'
+import Questions from './pages/uploader/Questions'
 
 function App() {
   const [user, setUser] = useState<{ id: string; email: string; role: string } | null>(null)
@@ -45,6 +46,7 @@ function App() {
         <Route path="/teacher/lessons/create" element={user?.role === 'teacher' ? <CreateLesson user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         
         <Route path="/uploader" element={user?.role === 'uploader' ? <UploaderDashboard user={user} /> : <Navigate to="/login" />} />
+        <Route path="/uploader/questions" element={user?.role === 'uploader' ? <Questions user={user} /> : <Navigate to="/login" />} />
         
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
