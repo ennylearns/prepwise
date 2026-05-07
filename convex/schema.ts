@@ -23,10 +23,19 @@ export default defineSchema({
     title: v.string(),
     content: v.string(),
     order: v.number(),
-    isPublished: v.boolean(),
+    status: v.union(
+      v.literal("draft"),
+      v.literal("ai_generated"),
+      v.literal("pending_review"),
+      v.literal("approved"),
+      v.literal("published")
+    ),
+    aiGeneratedContent: v.optional(v.string()),
+    generatedAt: v.optional(v.number()),
     createdBy: v.string(),
     createdAt: v.number(),
-  }).index("subjectId", ["subjectId"]),
+  }).index("subjectId", ["subjectId"])
+    .index("status", ["status"]),
 
   lessonQuestions: defineTable({
     lessonId: v.string(),
@@ -79,4 +88,10 @@ export default defineSchema({
   }).index("userId", ["userId"])
     .index("subscriptionCode", ["subscriptionCode"])
     .index("customerCode", ["customerCode"]),
+
+  dailyGenerations: defineTable({
+    teacherId: v.id("users"),
+    date: v.string(),
+    count: v.number(),
+  }).index("teacherId_date", ["teacherId", "date"]),
 })

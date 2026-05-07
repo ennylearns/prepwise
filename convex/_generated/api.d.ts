@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as aiGeneration from "../aiGeneration.js";
 import type * as auth from "../auth.js";
+import type * as crons from "../crons.js";
 import type * as curriculumData from "../curriculumData.js";
 import type * as http from "../http.js";
 import type * as payment from "../payment.js";
@@ -25,7 +27,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  aiGeneration: typeof aiGeneration;
   auth: typeof auth;
+  crons: typeof crons;
   curriculumData: typeof curriculumData;
   http: typeof http;
   payment: typeof payment;

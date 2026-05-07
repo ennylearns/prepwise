@@ -27,7 +27,9 @@ export const seedDatabase = mutation({
           title: lesson.title,
           content: "",
           order: lesson.order,
-          isPublished: false,
+          status: "draft",
+          aiGeneratedContent: undefined,
+          generatedAt: undefined,
           createdBy: "system",
           createdAt: Date.now(),
         })

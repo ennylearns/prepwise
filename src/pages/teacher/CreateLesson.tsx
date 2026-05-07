@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useQuery, useMutation } from 'convex/react'
+import { useQuery, useAction } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
-import { TopAppBar, Button } from '../../components'
+import { TopAppBar, Button, Card } from '../../components'
 
 interface User {
   id: string
@@ -16,91 +16,58 @@ interface CreateLessonProps {
   onLogout: () => void
 }
 
-type QuestionType = {
-  question: string
-  options: string[]
-  correct: string
-  explanation: string
-}
-
 export default function CreateLesson({ user, onLogout }: CreateLessonProps) {
   const navigate = useNavigate()
-  const subjects = useQuery(api.teacher.getSubjects)
+  const subjects = useQuery(api.aiGeneration.getSubjects)
   const [selectedSubjectId, setSelectedSubjectId] = useState('')
   
   const availableLessons = useQuery(
-    api.teacher.getAvailableLessons,
+    api.aiGeneration.getAvailableLessons,
     selectedSubjectId ? { subjectId: selectedSubjectId as Id<"subjects"> } : "skip"
   )
   const [selectedLessonId, setSelectedLessonId] = useState('')
 
-  const publishLessonMutation = useMutation(api.teacher.publishLesson)
-  const addLessonQuestionsMutation = useMutation(api.teacher.addLessonQuestions)
+  const remaining = useQuery(api.aiGeneration.getRemainingGenerations, {
+    teacherId: user.id as Id<"users">
+  })
 
-  const [content, setContent] = useState('')
-  const [questions, setQuestions] = useState<QuestionType[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const generateContent = useAction(api.aiGeneration.generateLessonContent)
+  
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
-  const addQuestion = () => {
-    setQuestions([...questions, { question: '', options: ['', '', '', ''], correct: 'A', explanation: '' }])
-  }
-
-  const updateQuestion = (index: number, field: string, value: any) => {
-    const updated = [...questions]
-    if (field === 'question') {
-      updated[index].question = value
-    } else if (field === 'options') {
-      updated[index].options = value
-    } else if (field === 'correct') {
-      updated[index].correct = value
-    } else if (field === 'explanation') {
-      updated[index].explanation = value
-    }
-    setQuestions(updated)
-  }
-
-  const handleSubmit = async () => {
-    if (!content || !selectedLessonId) {
-      alert('Please fill in content and select a lesson.')
-      return
-    }
-    if (questions.length < 1) { // MVP: Require at least 1 question
-      alert('Please add at least 1 question')
+  const handleGenerate = async () => {
+    if (!selectedLessonId) {
+      setError('Please select a lesson to generate content for.')
       return
     }
     
-    setIsLoading(true)
+    if (!remaining || remaining.remaining <= 0) {
+      setError('Daily generation limit reached. Try again tomorrow.')
+      return
+    }
+
+    setIsGenerating(true)
+    setError('')
+    setSuccess('')
+
     try {
-      const newLessonId = await publishLessonMutation({
+      const result = await generateContent({
         lessonId: selectedLessonId as Id<"lessons">,
-        content,
-        createdBy: user.id as Id<"users">
+        teacherId: user.id as Id<"users">,
       })
 
-      // Map local question state to the API format
-      const formattedQuestions = questions.map((q) => {
-        // Map "A", "B", "C", "D" to the actual option string
-        const optionIndex = q.correct === 'A' ? 0 : q.correct === 'B' ? 1 : q.correct === 'C' ? 2 : 3
-        const correctAnswerString = q.options[optionIndex]
-
-        return {
-          question: q.question,
-          options: q.options,
-          correctAnswer: correctAnswerString,
-          explanation: q.explanation
-        }
-      })
-
-      await addLessonQuestionsMutation({
-        lessonId: newLessonId,
-        questions: formattedQuestions
-      })
-
-      navigate('/teacher')
-    } catch (err) {
-      alert('Failed to create lesson: ' + err)
+      if (result.success) {
+        setSuccess(`Content generated successfully! ${result.remainingGenerations} generations remaining today.`)
+        setTimeout(() => {
+          navigate(`/teacher/lessons/${selectedLessonId}/review`)
+        }, 2000)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to generate content. Please try again.')
     } finally {
-      setIsLoading(false)
+      setIsGenerating(false)
     }
   }
 
@@ -109,8 +76,21 @@ export default function CreateLesson({ user, onLogout }: CreateLessonProps) {
       <TopAppBar title="Create Lesson" showBack user={user} onLogout={onLogout} />
       
       <main className="p-container-margin py-lg space-y-lg max-w-3xl mx-auto pb-24">
-        <section className="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
-          <h2 className="font-h2 text-h2 mb-lg">Lesson Details</h2>
+        <Card className="p-lg">
+          <h2 className="font-h2 text-h2 mb-lg">AI-Powered Lesson Generation</h2>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-lg">
+            Select a subject and lesson topic. Our AI will generate comprehensive lesson content 
+            for you to review and publish.
+          </p>
+
+          {remaining && (
+            <div className="flex items-center gap-sm p-md bg-surface-container rounded-lg mb-lg">
+              <span className="material-symbols-outlined text-primary">auto_awesome</span>
+              <span className="font-body-md text-body-md text-on-surface">
+                <strong>{remaining.remaining}</strong> of {remaining.limit} generations remaining today
+              </span>
+            </div>
+          )}
           
           <div className="space-y-lg">
             <div className="space-y-xs">
@@ -132,124 +112,107 @@ export default function CreateLesson({ user, onLogout }: CreateLessonProps) {
 
             {selectedSubjectId && (
               <div className="space-y-xs">
-                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Title</label>
+                <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Topic</label>
                 <select
                   value={selectedLessonId}
                   onChange={(e) => setSelectedLessonId(e.target.value)}
                   className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
                 >
-                  <option value="">Select Lesson</option>
+                  <option value="">Select Lesson Topic</option>
                   {availableLessons?.map((lesson: any) => (
                     <option key={lesson._id} value={lesson._id}>{lesson.title}</option>
                   ))}
                 </select>
-              </div>
-            )}
-
-            <div className="space-y-xs">
-              <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase">Lesson Content</label>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Enter lesson content here..."
-                rows={10}
-                className="w-full px-md py-md rounded-lg border border-outline bg-surface text-on-surface font-body-md resize-none"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
-          <div className="flex justify-between items-center mb-lg">
-            <h2 className="font-h2 text-h2">Practice Questions</h2>
-            <button
-              onClick={addQuestion}
-              className="text-primary font-button text-button flex items-center gap-xs"
-            >
-              <span className="material-symbols-outlined">add</span>
-              Add Question
-            </button>
-          </div>
-          
-          <div className="space-y-lg">
-            {questions.map((q, index) => (
-              <div key={index} className="p-md border border-surface-variant rounded-lg">
-                <div className="flex items-center justify-between mb-md">
-                  <span className="font-button text-button text-primary">Question {index + 1}</span>
-                  <button
-                    onClick={() => setQuestions(questions.filter((_, i) => i !== index))}
-                    className="text-error"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
-                
-                <input
-                  type="text"
-                  value={q.question}
-                  onChange={(e) => updateQuestion(index, 'question', e.target.value)}
-                  placeholder="Enter question text"
-                  className="w-full h-12 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md mb-md"
-                />
-                
-                <div className="grid grid-cols-2 gap-sm mb-md">
-                  {['A', 'B', 'C', 'D'].map((opt, optIndex) => (
-                    <div key={opt} className="flex items-center gap-sm">
-                      <input
-                        type="radio"
-                        name={`correct-${index}`}
-                        checked={q.correct === opt}
-                        onChange={() => updateQuestion(index, 'correct', opt)}
-                        className="text-primary"
-                      />
-                      <span className="font-button text-button">{opt}.</span>
-                      <input
-                        type="text"
-                        value={q.options[optIndex]}
-                        onChange={(e) => {
-                          const newOptions = [...q.options]
-                          newOptions[optIndex] = e.target.value
-                          updateQuestion(index, 'options', newOptions)
-                        }}
-                        placeholder={`Option ${opt}`}
-                        className="flex-1 h-10 px-md rounded-lg border border-outline bg-surface text-on-surface font-body-md"
-                      />
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="space-y-xs">
-                  <label className="block font-label-caps text-label-caps text-on-surface-variant">Explanation</label>
-                  <textarea
-                    value={q.explanation}
-                    onChange={(e) => updateQuestion(index, 'explanation', e.target.value)}
-                    placeholder="Explain the correct answer..."
-                    rows={2}
-                    className="w-full px-md py-sm rounded-lg border border-outline bg-surface text-on-surface font-body-md resize-none"
-                  />
-                </div>
-              </div>
-            ))}
-            
-            {questions.length === 0 && (
-              <div className="text-center py-lg text-on-surface-variant">
-                <p>No questions added yet. Click "Add Question" to get started.</p>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-xs">
+                  {availableLessons?.length || 0} lessons available for this subject
+                </p>
               </div>
             )}
           </div>
-        </section>
+        </Card>
+
+        {error && (
+          <div className="p-md bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 flex items-center gap-sm">
+            <span className="material-symbols-outlined text-[20px]">error</span>
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="p-md bg-green-50 border border-green-200 rounded-lg text-sm text-green-600 flex items-center gap-sm">
+            <span className="material-symbols-outlined text-[20px]">check_circle</span>
+            {success}
+          </div>
+        )}
 
         <div className="flex gap-md">
           <Link to="/teacher" className="flex-1">
-            <Button variant="outline" className="w-full">Cancel</Button>
+            <Button variant="outline" className="w-full">
+              <span className="material-symbols-outlined">arrow_back</span>
+              Back to Dashboard
+            </Button>
           </Link>
           <Button
-            onClick={handleSubmit}
-            disabled={isLoading}
+            onClick={handleGenerate}
+            disabled={isGenerating || !selectedLessonId || !remaining || remaining.remaining <= 0}
             className="flex-1"
           >
-            {isLoading ? 'Saving...' : 'Save Lesson'}
+            {isGenerating ? (
+              <>
+                <span className="material-symbols-outlined animate-spin">sync</span>
+                Generating...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined">auto_awesome</span>
+                Generate with AI
+              </>
+            )}
           </Button>
+        </div>
+
+        <Card className="p-lg">
+          <h3 className="font-h2 text-h2 text-on-surface mb-md">How it works</h3>
+          <div className="space-y-md">
+            <div className="flex items-start gap-md">
+              <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                <span className="font-button text-button text-primary">1</span>
+              </div>
+              <div>
+                <h4 className="font-button text-button text-on-surface">Select a Lesson</h4>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  Choose the subject and specific lesson topic you want to create content for.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-md">
+              <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                <span className="font-button text-button text-primary">2</span>
+              </div>
+              <div>
+                <h4 className="font-button text-button text-on-surface">AI Generates Content</h4>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  Our AI creates comprehensive lesson content including objectives, examples, and common mistakes.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-md">
+              <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                <span className="font-button text-button text-primary">3</span>
+              </div>
+              <div>
+                <h4 className="font-button text-button text-on-surface">Review & Publish</h4>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  Edit the generated content if needed, then approve and publish for students.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <div className="text-center text-sm text-on-surface-variant">
+          <p>Daily limit: 5 lessons per day</p>
+          <p>Resets at midnight</p>
         </div>
       </main>
     </div>

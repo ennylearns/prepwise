@@ -12,6 +12,7 @@ import Upgrade from './pages/student/Upgrade'
 import PaymentCallback from './pages/student/PaymentCallback'
 import TeacherDashboard from './pages/teacher/Dashboard'
 import CreateLesson from './pages/teacher/CreateLesson'
+import LessonReview from './pages/teacher/LessonReview'
 import UploaderDashboard from './pages/uploader/Dashboard'
 import Questions from './pages/uploader/Questions'
 
@@ -44,6 +45,7 @@ function App() {
         
         <Route path="/teacher" element={user?.role === 'teacher' ? <TeacherDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/teacher/lessons/create" element={user?.role === 'teacher' ? <CreateLesson user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+        <Route path="/teacher/lessons/:lessonId/review" element={user?.role === 'teacher' ? <LessonReview user={user} /> : <Navigate to="/login" />} />
         
         <Route path="/uploader" element={user?.role === 'uploader' ? <UploaderDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/uploader/questions" element={user?.role === 'uploader' ? <Questions user={user} /> : <Navigate to="/login" />} />
