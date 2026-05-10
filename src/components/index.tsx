@@ -117,9 +117,9 @@ export function TopAppBar({ title, showBack, user, onLogout }: TopAppBarProps) {
     <header className="sticky top-0 w-full flex justify-between items-center px-4 h-16 bg-slate-50/80 backdrop-blur-md z-50 border-b border-surface-variant">
       <div className="flex items-center gap-sm">
         {showBack && (
-          <a href="javascript:history.back()" className="material-symbols-outlined text-on-surface hover:opacity-80">
+          <button onClick={() => window.history.back()} className="material-symbols-outlined text-on-surface hover:opacity-80">
             arrow_back
-          </a>
+          </button>
         )}
         <span className="material-symbols-outlined text-primary text-2xl">school</span>
         <span className="font-h1 text-h1 text-primary">{title || 'Prepwise'}</span>
